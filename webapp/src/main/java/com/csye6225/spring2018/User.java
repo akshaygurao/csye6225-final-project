@@ -1,4 +1,4 @@
-package com.csye6225.spring2018.pojo;
+package com.csye6225.spring2018;
 
 import javax.persistence.*;
 
