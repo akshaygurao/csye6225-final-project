@@ -7,9 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.session.Session;
+import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 
@@ -54,7 +57,13 @@ public class UserController {
 
     @RequestMapping("/login")
     public String viewLoginPage(){
-        logger.info("Loading registration page.");
+        logger.info("Loading login page.");
         return "login";
+    }
+
+    @RequestMapping("/logout")
+    public String logoutPage(){
+        logger.info("Loading index page after logging out.");
+        return "index";
     }
 }
