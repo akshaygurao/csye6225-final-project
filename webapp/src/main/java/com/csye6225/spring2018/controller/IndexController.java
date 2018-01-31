@@ -16,4 +16,10 @@ public class IndexController {
     return "index";
   }
 
+  @RequestMapping("/register")
+  public String index1() {
+    logger.info("Loading registration page.");
+    return "register";
+  }
+
 }
