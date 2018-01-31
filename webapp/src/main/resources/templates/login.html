@@ -13,7 +13,28 @@
 <div th:replace="fragments/header :: header"/>
 <body>
 <div th:replace="fragments/navigation :: navigation"/>
+<script>
 
+    jQuery(document).ready(function ($) {
+        $('#loginform').submit(function (event) {
+            event.preventDefault();
+            var data = 'username=' + $('#username').val() + '&password=' + $('#password').val();
+            $.ajax({
+                data: data,
+                timeout: 1000,
+                type: 'POST',
+                url: '/login'
+
+            }).done(function(data, textStatus, jqXHR) {
+                var preLoginInfo = JSON.parse($.cookie('dashboard.pre.login.request'));
+                window.location = preLoginInfo.url;
+
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                alert('Booh! Wrong credentials, try again!');
+            });
+        });
+    });
+</script>
 
 <!-- Page Content -->
 <div class="container">
@@ -22,7 +43,7 @@
     </p>
 
     <br/>
-    <form class="form-horizontal" action="/loginUser" method="post">
+    <form class="form-horizontal" action="#" th:action="@{/loginUser}" th:object="${user}"method="post">
         <div class="form-group">
             <div class="col-sm-10">
                 <input type="email" class="form-control" id="email" placeholder="Email" name="email"></input>
