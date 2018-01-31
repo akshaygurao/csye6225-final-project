@@ -7,11 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 
 
@@ -21,6 +23,7 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    HttpSession session;
 
     @RequestMapping("/register")
     public String viewRegisterPage() {
@@ -36,6 +39,7 @@ public class UserController {
         if (u.getEmail().equals(email) && BCrypt.checkpw(password,u.getPassword())){
         logger.info("Loading user home page.");
         System.out.println("Found!");
+        session.setAttribute("user",email);
             return "UserHome";
         }
         }
@@ -60,8 +64,9 @@ public class UserController {
     }
 
     @RequestMapping("/logout")
-    public String logoutPage(){
+    public String logoutPage(HttpSession session){
         logger.info("Loading index page after logging out.");
+        session.invalidate();
         return "index";
     }
 }
