@@ -8,6 +8,7 @@ echo "This is my network building shell script"
 
 # you can just have one command for creation of the name
 #creating vpc
+STACK_NAME="$1"
 instance_id=$(aws ec2 create-vpc --cidr-block 10.0.0.0/16 --query "Vpc.VpcId" --output text)
 echo $instance_id
 
@@ -15,7 +16,7 @@ echo $instance_id
 aws ec2 wait vpc-available --vpc-ids $instance_id
 
 #creating the name for vpc
-aws ec2 create-tags --resources $instance_id --tags 'Key=Name,Value=$STACK_NAME-csye6225-vpc'
+aws ec2 create-tags --resources $instance_id --tags 'Key=Name,Value='$STACK_NAME'-csye6225-vpc'
 vpc_name=$(aws ec2 describe-vpcs --vpc-ids $instance_id --query "Vpcs[0].Tags[0].Value" --output text)
 echo $vpc_name
 
@@ -24,7 +25,7 @@ gateway_id=$(aws ec2 create-internet-gateway --query "InternetGateway.InternetGa
 echo $gateway_id
 
 #creating the name for internet gateway
-aws ec2 create-tags --resources $gateway_id --tags 'Key=Name,Value=$STACK_NAME-csye6225-InternetGateway'
+aws ec2 create-tags --resources $gateway_id --tags 'Key=Name,Value='$STACK_NAME'-csye6225-InternetGateway'
 gateway_name=$(aws ec2 describe-internet-gateways --internet-gateway-ids $gateway_id --query "InternetGateways[0].Tags[0].Value" --output text)
 echo $gateway_name
 
@@ -36,7 +37,7 @@ route_table_id=$(aws ec2 create-route-table --vpc-id $instance_id --query "Route
 echo $route_table_id
 
 #naming the route table
-aws ec2 create-tags --resources $route_table_id --tags 'Key=Name,Value=$STACK_NAME-csye6225-public-route-table'
+aws ec2 create-tags --resources $route_table_id --tags 'Key=Name,Value='$STACK_NAME'-csye6225-public-route-table'
 route_table_name=$(aws ec2 describe-route-tables --route-table-ids $route_table_id --query "RouteTables[0].Tags[0].Value" --output text)
 echo $route_table_name
 
