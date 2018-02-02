@@ -22,4 +22,9 @@ public class IndexController {
     return "register";
   }
 
+  @RequestMapping("/login")
+  public String login() {
+    logger.info("Loading login page.");
+    return "login";
+  }
 }

@@ -21,14 +21,12 @@
     </p>
 
     <br></br>
-    <form class="form-horizontal" action="/" method="POST" enctype="utf8">
+    <form class="form-horizontal" id="registerform">
         <div class="form-group">
             <div class="col-sm-10">
                 <input type="email" class="form-control" id="email" placeholder="Email" name="email"></input>
-                <span id="emailError" style="display:none"></span>
-                <input type="password" class="form-control" id="pwd" placeholder="Password" name="password"></input>
-                <span id="passwordError" style="display:none"></span>
-                <button href="#" onclick="register()" class="btn btn-primary btn-block" value="Register">Register</button>
+                <input type="text" class="form-control" id="pwd" placeholder="Password" name="password"></input>
+                <input type="submit" class="btn btn-primary btn-block" value="Register">Register</input>
             </div>
         </div>
     </form>
@@ -36,42 +34,40 @@
 </div>
 <!-- /.container -->
 <div th:replace="fragments/footer :: footer"/>
+<script>
+    $(document).ready(function () {
+
+        $("#registerform").submit(function (e) {
+
+            var email = $("#email").val();
+            var password = $("#pwd").val();
+            window.alert(email + " " + password);
+            if($.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:8080/registerUser',
+                    data:
+                        JSON.stringify({
+                            email: email,
+                            password: password
+                        }),
+                    async: false,
+                    dataType: 'json',
+                    contentType: "application/json",
+
+                    success: function (response) {
+                        window.alert("response received");
+                        window.alert(response.message.toString());
+                    },
+                    error: function (xMLHttpRequest, textStatus, error) {
+                        window.alert(xMLHttpRequest.status.toString());
+                        window.alert(xMLHttpRequest.getResponseHeader().toString());
+                    }
+                }).done())
+                if(alert("Registration Success! Redirect to login?"))$.get("http://localhost:8080/login");
+        });
+    })
 
 
-<script type="text/javascript">
-    var serverContext = [[@{/user/}]];
-
-        function register(){
-            $(".alert").html("").hide();
-            var formData= $('form').serialize();
-            $.post(serverContext + "/registerUser",formData ,function(data){
-                if(data.message == "success"){
-                    window.location.href = serverContext +"/successRegister.html";
-                }
-            })
-                .fail(function(data) {
-                    if(data.responseJSON.error.indexOf("MailError") > -1)
-                    {
-                        window.location.href = serverContext + "/emailError.html";
-                    }
-                    else if(data.responseJSON.error.indexOf("InternalError") > -1){
-                        window.location.href = serverContext +
-                            "/login.html?message=" + data.responseJSON.message;
-                    }
-                    else if(data.responseJSON.error == "UserAlreadyExist"){
-                        $("#emailError").show().html(data.responseJSON.message);
-                    }
-                    else{
-                        var errors = $.parseJSON(data.responseJSON.message);
-                        $.each( errors, function( index,item ){
-                            $("#"+item.field+"Error").show().html(item.defaultMessage);
-                        });
-                        errors = $.parseJSON(data.responseJSON.error);
-                        $.each( errors, function( index,item ){
-                            $("#globalError").show().append(item.defaultMessage+"<br></br>");
-                        });
-                    }
-                }
 </script>
 </body>
 </html>

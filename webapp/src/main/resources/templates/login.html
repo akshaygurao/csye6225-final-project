@@ -15,25 +15,48 @@
 <div th:replace="fragments/navigation :: navigation"/>
 <script>
 
-    jQuery(document).ready(function ($) {
-        $('#loginform').submit(function (event) {
-            event.preventDefault();
-            var data = 'username=' + $('#username').val() + '&password=' + $('#password').val();
+    $(document).ready(function() {
+
+        $("#loginform").submit(function (e) {
+
+            var email = $("#email").val();
+            var password = $("#pwd").val();
+            window.alert(email + "" + password);
             $.ajax({
-                data: data,
-                timeout: 1000,
-                type: 'POST',
-                url: '/login'
+                type:'POST',
+                url: 'http://localhost:8080/loginUser',
+                data:
+                    JSON.stringify({email:email,
+                        password: password}),
+                async:false,
+                dataType: 'json',
+                contentType: "application/json",
 
-            }).done(function(data, textStatus, jqXHR) {
-                var preLoginInfo = JSON.parse($.cookie('dashboard.pre.login.request'));
-                window.location = preLoginInfo.url;
+                success: function (response) {
+                    window.alert("response received");
+                    window.alert(response.message.toString());
+                    if (response.message === false) {
+                        $("#errormessage").html(" username or password is incorrect");
+                        e.preventDefault();
+                        return false;
+                    }
+                    else {
+                        //  $(this).unbind('submit').submit();
+                        return true;
+                    }
 
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                alert('Booh! Wrong credentials, try again!');
-            });
+                },
+                error:function (xMLHttpRequest,textStatus,error) {
+                    window.alert(xMLHttpRequest.status.toString());
+                    window.alert(xMLHttpRequest.getResponseHeader().toString());
+                }
+            }).done()
+            {
+
+            }
         });
     });
+
 </script>
 
 <!-- Page Content -->
@@ -43,7 +66,7 @@
     </p>
 
     <br/>
-    <form class="form-horizontal" action="#" th:action="@{/loginUser}" th:object="${user}"method="post">
+    <form class="form-horizontal" id="loginform">
         <div class="form-group">
             <div class="col-sm-10">
                 <input type="email" class="form-control" id="email" placeholder="Email" name="email"></input>
