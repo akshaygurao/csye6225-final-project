@@ -15,12 +15,23 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
 
+<<<<<<< a796c7f3e19207b20eb4d43e8b8bf18d9615e86e
             <div th:if="${param.success}">
                 <div class="alert alert-info">
                     You've successfully registered to our awesome app!
                 </div>
+=======
+    <br></br>
+    <form class="form-horizontal" id="registerform">
+        <div class="form-group">
+            <div class="col-sm-10">
+                <input type="email" class="form-control" id="email" placeholder="Email" name="email"></input>
+                <input type="text" class="form-control" id="pwd" placeholder="Password" name="password"></input>
+                <input type="submit" class="btn btn-primary btn-block" value="Register">Register</input>
+>>>>>>> Rest and response complete
             </div>
 
+<<<<<<< a796c7f3e19207b20eb4d43e8b8bf18d9615e86e
             <h1>Registration</h1>
             <form th:action="@{/registration}" th:object="${user}" method="post">
 
@@ -116,5 +127,45 @@
 <script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 
+=======
+</div>
+<!-- /.container -->
+<div th:replace="fragments/footer :: footer"/>
+<script>
+    $(document).ready(function () {
+
+        $("#registerform").submit(function (e) {
+
+            var email = $("#email").val();
+            var password = $("#pwd").val();
+            window.alert(email + " " + password);
+            if($.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:8080/registerUser',
+                    data:
+                        JSON.stringify({
+                            email: email,
+                            password: password
+                        }),
+                    async: false,
+                    dataType: 'json',
+                    contentType: "application/json",
+
+                    success: function (response) {
+                        window.alert("response received");
+                        window.alert(response.message.toString());
+                    },
+                    error: function (xMLHttpRequest, textStatus, error) {
+                        window.alert(xMLHttpRequest.status.toString());
+                        window.alert(xMLHttpRequest.getResponseHeader().toString());
+                    }
+                }).done())
+                if(alert("Registration Success! Redirect to login?"))$.get("http://localhost:8080/login");
+        });
+    })
+
+
+</script>
+>>>>>>> Rest and response complete
 </body>
 </html>
