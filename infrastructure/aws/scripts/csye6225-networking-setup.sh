@@ -9,6 +9,11 @@ echo "This is my network building shell script"
 # you can just have one command for creation of the name
 #creating vpc
 STACK_NAME="$1"
+if [ -z "$STACK_NAME" ];then
+	echo "No parameters were given"
+	exit 0
+fi
+
 instance_id=$(aws ec2 create-vpc --cidr-block 10.0.0.0/16 --query "Vpc.VpcId" --output text)
 echo $instance_id
 
