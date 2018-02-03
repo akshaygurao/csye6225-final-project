@@ -1,4 +1,4 @@
-# Assignment 2
+# CSYE 6225 Spring 2018 Starter Repository
 
 ## Team members
 Vighnesh Venkatakrishnan venkatakrishnan.v@husky.neu.edu 001250045
