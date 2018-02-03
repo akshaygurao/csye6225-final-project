@@ -21,7 +21,6 @@
 
             var email = $("#email").val();
             var password = $("#pwd").val();
-            window.alert(email + "" + password);
             $.ajax({
                 type:'POST',
                 url: 'http://localhost:8080/loginUser',
@@ -33,27 +32,17 @@
                 contentType: "application/json",
 
                 success: function (response) {
-                    window.alert("response received");
-                    window.alert(response.message.toString());
-                    if (response.message === false) {
-                        $("#errormessage").html(" username or password is incorrect");
-                        e.preventDefault();
-                        return false;
-                    }
-                    else {
-                        //  $(this).unbind('submit').submit();
-                        return true;
-                    }
+                        window.alert("Login Successful!");
+                        window.open("/loginSuccess");
+                        window.close();
 
                 },
                 error:function (xMLHttpRequest,textStatus,error) {
-                    window.alert(xMLHttpRequest.status.toString());
-                    window.alert(xMLHttpRequest.getResponseHeader().toString());
+                alert("Login failed!");
+                window.open("/login");
+                window.close();
                 }
-            }).done()
-            {
-
-            }
+            }).done();
         });
     });
 

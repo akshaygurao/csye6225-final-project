@@ -27,4 +27,16 @@ public class IndexController {
     logger.info("Loading login page.");
     return "login";
   }
+
+    @RequestMapping("/logout")
+    public String logoutPage(){
+        logger.info("Loading index page after logging out.");
+        return "index";
+    }
+
+    @RequestMapping("/loginSuccess")
+    public String userSucceess(){
+        logger.info("Loading User Success Home page");
+        return "UserHome";
+    }
 }
