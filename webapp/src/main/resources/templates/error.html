@@ -1,7 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>UserHome</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
 
@@ -13,15 +12,16 @@
 </head>
 <div th:replace="fragments/header :: header"/>
 <body>
-<div th:replace="fragments/userNavigation :: userNavigation"/>
-<div class="container">
-Welcome Home
+<div th:replace="fragments/navigation :: navigation"/>
 
-    <br></br>
-    <script language="JavaScript">
-        var localtime = new Date();
-        document.write("Server time is " +localtime);
-    </script>
+
+<!-- Page Content -->
+<div class="container">
+    <p>
+    <h1>ERROR PAGE!</h1>
+    </p>
 </div>
+<!-- /.container -->
+<div th:replace="fragments/footer :: footer"/>
 </body>
 </html>
