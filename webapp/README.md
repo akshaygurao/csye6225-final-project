@@ -8,9 +8,9 @@ Akshay Gurao gurao.a@husky.neu.edu 001280535
 
 ### Prerequisites
 
-IntelliJ or any other IDE
-Tomcat
-MySQL
+* IntelliJ or any other IDE
+* Tomcat
+* MySQL
 
 
 ### Build and Deploy
@@ -26,21 +26,8 @@ MySQL
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+Steps to run JUnit tests
 
 ```
-Give an example
+Right click and Run the Test.class file
 ```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-

@@ -1,17 +1,18 @@
 # CSYE 6225 Spring 2018 Starter Repository
 
 ## Team members
-Vighnesh Venkatakrishnan venkatakrishnan.v@husky.neu.edu 001250045
-Rohil Subramanian subramanian.roh@husky.neu.edu 001222613
-Akshay Gurao gurao.a@husky.neu.edu 001280535
-
+```
+* Vighnesh Venkatakrishnan venkatakrishnan.v@husky.neu.edu 001250045
+* Rohil Subramanian subramanian.roh@husky.neu.edu 001222613
+* Akshay Gurao gurao.a@husky.neu.edu 001280535
+```
 
 ### Prerequisites
 
-IntelliJ or any other IDE
-Tomcat
-MySQL
-JMeter
+* IntelliJ or any other IDE
+* Tomcat
+* MySQL
+* JMeter
 
 
 
@@ -25,24 +26,10 @@ JMeter
 * [TravisCi](https://travis-ci.com/) for Remote Deployment
 
 
-
 ## Running the tests
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+Steps to run JUnit tests
 
 ```
-Give an example
+Right click and Run the Test.class file
 ```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-

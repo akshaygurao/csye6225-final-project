@@ -8,29 +8,15 @@ Akshay Gurao gurao.a@husky.neu.edu 001280535
 
 ### Prerequisites
 
-JMeter
-MySQL
-Tomcat
+* [JMeter](http://jmeter.apache.org/download_jmeter.cgi) for Load Testing
+* MySQL for Database connectivity
+* [Tomcat](http://tomcat.apache.org/) for Local Deployment
 
 
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
 
 ```
-Give an example
+jmeter -n –t path-to-file.jmx -l testresults.jtl
 ```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
