@@ -3,16 +3,24 @@ package com.csye6225.spring2018.controller;
 import com.csye6225.spring2018.UserRepository;
 import com.csye6225.spring2018.User;
 
+import com.google.gson.JsonObject;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.apache.http.HttpResponse;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.HashMap;
 
 
 @Controller
@@ -22,46 +30,55 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping("/register")
-    public String viewRegisterPage() {
-        logger.info("Loading registration page.");
-        return "register";
-    }
 
-    @RequestMapping("/loginUser")
-    @PostMapping("/loginUser")
-    public String login(@RequestParam String email, @RequestParam String password) {
+    @RequestMapping(value="/loginUser", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+    @ResponseBody
+    public String login(@RequestBody String js, HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException {
 
-        for (User u : userRepository.findAll()){
-        if (u.getEmail().equals(email) && BCrypt.checkpw(password,u.getPassword())){
-        logger.info("Loading user home page.");
-        System.out.println("Found!");
-            return "UserHome";
-        }
+        JSONParser parser = new JSONParser();
+        HashMap<String, String> map = (HashMap<String, String>) parser.parse(js);
+        for (User u : userRepository.findAll()) {
+            if (u.getEmail().equals(map.get("email")) && BCrypt.checkpw(map.get("password"), u.getPassword())) {
+                logger.info("Loading user home page.");
+                HttpSession session = request.getSession(true);
+                session.setAttribute("email", map.get("email"));
+                System.out.println("Found!");
+                JsonObject json = new JsonObject();
+                json.addProperty("response", "Login Success!");
+                try {
+                    response.sendRedirect("/loginSuccess");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return json.toString();
+            }
         }
         System.out.println("User Not found");
-        return "error";
+        return new JsonObject().toString();
     }
 
-    @PostMapping("/registerUser")
-    public String createUser(@RequestParam String email, @RequestParam String password) {
-        logger.info("Loading index page after successful registration.");
+    @RequestMapping(value = "/registerUser", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+    @ResponseBody
+    public String createUser(@RequestBody String js) throws ParseException {
+        logger.info("Registering user account with information: {}");
+        System.out.println(js);
+        JSONParser parser = new JSONParser();
+        HashMap<String, String> map = (HashMap<String, String>) parser.parse(js);
+        for (User u : userRepository.findAll()){
+            if (u.getEmail().equals(map.get("email"))) {
+                logger.info("User already exists.");
+                return "error";
+            }
+        }
+        System.out.println(map.toString());
+        System.out.println(map);
         User newUser = new User();
-        newUser.setEmail(email);
-        newUser.setPassword(BCrypt.hashpw(password,BCrypt.gensalt()));
+        newUser.setEmail(String.valueOf(map.get("email")));
+        newUser.setPassword(BCrypt.hashpw(String.valueOf(map.get("password")),BCrypt.gensalt()));
         userRepository.save(newUser);
-        return "index";
-    }
-
-    @RequestMapping("/login")
-    public String viewLoginPage(){
-        logger.info("Loading login page.");
-        return "login";
-    }
-
-    @RequestMapping("/logout")
-    public String logoutPage(){
-        logger.info("Loading index page after logging out.");
-        return "index";
+        JsonObject json = new JsonObject();
+        json.addProperty("response","Success!");
+        return json.toString();
     }
 }
+
