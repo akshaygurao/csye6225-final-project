@@ -11,6 +11,45 @@
     <title>Registration</title>
 </head>
 <body>
+<<<<<<< HEAD
+=======
+<div th:replace="fragments/navigation :: navigation"/>
+<script>
+    $(document).ready(function () {
+
+        $("#registerform").submit(function (e) {
+
+            var email = $("#email").val();
+            var password = $("#password").val();
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8080/registerUser',
+                data:
+                    JSON.stringify({
+                        email: email,
+                        password: password
+                    }),
+                async: false,
+                dataType: 'json',
+                contentType: "application/json",
+
+                success: function (response) {
+                    window.alert("Registration successful!");
+                    window.open("/login");
+                    window.close();
+                },
+                error: function (xMLHttpRequest, textStatus, error) {
+                    window.alert("User already exists!");
+                    window.open("/register");
+                    window.close();
+                }
+            }).done();
+        });
+    });
+
+</script>
+<!-- Page Content -->
+>>>>>>> 70ab0e0b461484288bbf08599514e16fa9bf1450
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
@@ -22,16 +61,21 @@
                 </div>
 =======
     <br></br>
-    <form class="form-horizontal" id="registerform">
+    <form class="form-horizontal" id="registerform" content="multipart/form-data">
         <div class="form-group">
             <div class="col-sm-10">
                 <input type="email" class="form-control" id="email" placeholder="Email" name="email"></input>
+<<<<<<< HEAD
                 <input type="text" class="form-control" id="pwd" placeholder="Password" name="password"></input>
                 <input type="submit" class="btn btn-primary btn-block" value="Register">Register</input>
 <<<<<<< HEAD
 >>>>>>> Rest and response complete
 =======
 >>>>>>> b7d30d67f73b91e702bafd0277e8c445b054dead
+=======
+                <input type="text" class="form-control" id="password" placeholder="Password" name="password"></input>
+                <input type="submit" class="btn btn-primary btn-block" value="Register"></input>
+>>>>>>> 70ab0e0b461484288bbf08599514e16fa9bf1450
             </div>
 
 <<<<<<< a796c7f3e19207b20eb4d43e8b8bf18d9615e86e
@@ -134,26 +178,8 @@
 </div>
 <!-- /.container -->
 <div th:replace="fragments/footer :: footer"/>
-<script>
-    $(document).ready(function () {
 
-        $("#registerform").submit(function (e) {
-
-            var email = $("#email").val();
-            var password = $("#pwd").val();
-            window.alert(email + " " + password);
-            if($.ajax({
-                    type: 'POST',
-                    url: 'http://localhost:8080/registerUser',
-                    data:
-                        JSON.stringify({
-                            email: email,
-                            password: password
-                        }),
-                    async: false,
-                    dataType: 'json',
-                    contentType: "application/json",
-
+<<<<<<< HEAD
                     success: function (response) {
                         window.alert("response received");
                         window.alert(response.message.toString());
@@ -170,5 +196,7 @@
 
 </script>
 >>>>>>> Rest and response complete
+=======
+>>>>>>> 70ab0e0b461484288bbf08599514e16fa9bf1450
 </body>
 </html>

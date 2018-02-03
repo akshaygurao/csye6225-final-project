@@ -1,27 +1,29 @@
 package com.csye6225.spring2018.controller;
 
-import com.csye6225.spring2018.GenericResponse;
 import com.csye6225.spring2018.UserRepository;
 import com.csye6225.spring2018.User;
 
+import com.google.gson.JsonObject;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.xml.ws.Response;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashMap;
 
 
-@RestController
+@Controller
 public class UserController {
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -29,37 +31,54 @@ public class UserController {
     private UserRepository userRepository;
 
 
-    @PostMapping("/loginUser")
+    @RequestMapping(value="/loginUser", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
-    public String login(@RequestBody HashMap<String, String> map) {
-        for (User u : userRepository.findAll()){
-        if (u.getEmail().equals(map.get("email")) && BCrypt.checkpw(map.get("password"),u.getPassword())){
-        logger.info("Loading user home page.");
-        System.out.println("Found!");
-            return "UserHome";
-        }
+    public String login(@RequestBody String js, HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException {
+
+        JSONParser parser = new JSONParser();
+        HashMap<String, String> map = (HashMap<String, String>) parser.parse(js);
+        for (User u : userRepository.findAll()) {
+            if (u.getEmail().equals(map.get("email")) && BCrypt.checkpw(map.get("password"), u.getPassword())) {
+                logger.info("Loading user home page.");
+                HttpSession session = request.getSession(true);
+                session.setAttribute("email", map.get("email"));
+                System.out.println("Found!");
+                JsonObject json = new JsonObject();
+                json.addProperty("response", "Login Success!");
+                try {
+                    response.sendRedirect("/loginSuccess");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return json.toString();
+            }
         }
         System.out.println("User Not found");
-        return "error";
+        return new JsonObject().toString();
     }
 
-    @PostMapping("/registerUser")
+    @RequestMapping(value = "/registerUser", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
-    public String createUser(@RequestBody HashMap<String,String> js) throws JSONException {
+    public String createUser(@RequestBody String js) throws ParseException {
         logger.info("Registering user account with information: {}");
-        System.out.println(js.toString());
         System.out.println(js);
-        User newUser = new User();
-        newUser.setEmail(String.valueOf(js.get("email")));
-        newUser.setPassword(BCrypt.hashpw(String.valueOf(js.get("password")),BCrypt.gensalt()));
-        userRepository.save(newUser);
-        return "Success!";
+        JSONParser parser = new JSONParser();
+        HashMap<String, String> map = (HashMap<String, String>) parser.parse(js);
+        for (User u : userRepository.findAll()){
+            if (u.getEmail().equals(map.get("email"))) {
+                logger.info("User already exists.");
+                return "error";
+            }
         }
-
-
-    @RequestMapping("/logout")
-    public String logoutPage(){
-        logger.info("Loading index page after logging out.");
-        return "index";
+        System.out.println(map.toString());
+        System.out.println(map);
+        User newUser = new User();
+        newUser.setEmail(String.valueOf(map.get("email")));
+        newUser.setPassword(BCrypt.hashpw(String.valueOf(map.get("password")),BCrypt.gensalt()));
+        userRepository.save(newUser);
+        JsonObject json = new JsonObject();
+        json.addProperty("response","Success!");
+        return json.toString();
     }
 }
+
