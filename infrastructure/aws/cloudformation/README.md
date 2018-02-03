@@ -33,6 +33,14 @@ aws configure
 
 Make sure that the template file is in the same directory as the scripts
 
+
+```
+Running the script
+
+> ./csye6225-aws-cf-create-stack.sh
+
+```
+
 ```
 aws cloudformation describe-stacks
 

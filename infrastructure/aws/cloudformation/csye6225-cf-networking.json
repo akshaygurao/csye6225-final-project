@@ -11,7 +11,7 @@
             "EnableDnsSupport" : "false",
             "EnableDnsHostnames" : "false",
             "InstanceTenancy" : "dedicated",
-            "Tags" : [ {"Key" : "Name", "Value" : "rohilvpc"} ]
+            "Tags" : [ {"Key" : "Name", "Value" : { "Ref" : "vpcName" }} ]
          },
          "DependsOn":["myGateway"]
         },
@@ -20,7 +20,7 @@
         "Type": "AWS::EC2::InternetGateway",
         "Properties":
         {
-            "Tags" : [ {"Key" : "Name", "Value" : "rohilgateway"} ]
+            "Tags" : [ {"Key" : "Name", "Value" : { "Ref" : "gatewayName" }} ]
         }
         },
       "myRouteTable":
@@ -28,7 +28,7 @@
         "Type": "AWS::EC2::RouteTable",
         "Properties":
         {
-            "Tags" : [ {"Key" : "Name", "Value" : "rohilroutetable"} ],
+            "Tags" : [ {"Key" : "Name", "Value" : { "Ref" : "tableName" }} ],
             "VpcId":
             {
                 "Ref": "myVPC"
@@ -38,9 +38,9 @@
       "myFirstRoute":
       {
         "Type": "AWS::EC2::Route",
+        "DependsOn":"myInternetGateway",
         "Properties":
         {
-
             "DestinationCidrBlock":"0.0.0.0/0",
             "RouteTableId":
             {
@@ -49,8 +49,7 @@
             "GatewayId":
             {
                 "Ref":"myGateway"
-            },
-            "DependsOn":["myInternetGateway"]
+            }
         }
       },
        "myInternetGateway":
@@ -68,5 +67,18 @@
                 }
             }
         }
+    },
+
+    "Parameters":{
+        "vpcName":{
+            "Type":"String"
+        },
+        "gatewayName":{
+            "Type":"String"
+        },
+        "tableName":{
+            "Type":"String"
+        }
+
     }
 }     

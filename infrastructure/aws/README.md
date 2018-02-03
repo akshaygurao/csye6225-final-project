@@ -31,6 +31,13 @@ aws configure
 
 ### Break down into end to end tests
 
+```
+Running the script
+
+> ./csye6225-aws-networking-setup.sh stackname
+
+```
+
 
 
 ```
