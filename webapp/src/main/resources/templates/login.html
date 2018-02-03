@@ -32,15 +32,16 @@
                 contentType: "application/json",
 
                 success: function (response) {
-                        window.alert("Login Successful!");
-                        window.open("/loginSuccess");
-                        window.close();
+                    alert("Login failed!");
+                    window.open("/login");
+                    window.close();
+
 
                 },
                 error:function (xMLHttpRequest,textStatus,error) {
-                alert("Login failed!");
-                window.open("/login");
-                window.close();
+                    window.alert("Login Successful!");
+                    window.open("/loginSuccess");
+                    window.close();
                 }
             }).done();
         });
