@@ -26,13 +26,15 @@ echo $route_table_id
 aws ec2 delete-route-table --route-table-id $route_table_id
 
 #detach the intenet gateway
-aws ec2 detach-internet-gateway --internet-gateway-id $gateway_id --vpc-id $vpc_id
+
 
 
 
 # delete internet gateway
 gateway_id=$(aws ec2 describe-internet-gateways --filters "Name=tag-value,Values="$STACK_NAME"-csye6225-InternetGateway" --query "InternetGateways[*].InternetGatewayId" --output text)
 echo $gateway_id
+
+aws ec2 detach-internet-gateway --internet-gateway-id $gateway_id --vpc-id $vpc_id
 
 aws ec2 delete-internet-gateway --internet-gateway-id $gateway_id
 
