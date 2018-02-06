@@ -5,14 +5,11 @@ import com.csye6225.spring2018.User;
 
 import com.google.gson.JsonObject;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
-import org.apache.http.HttpResponse;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
