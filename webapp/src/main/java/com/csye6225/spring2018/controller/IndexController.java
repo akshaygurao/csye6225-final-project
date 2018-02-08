@@ -43,10 +43,10 @@ public class IndexController {
     @RequestMapping(value = "/loginSuccess", method = RequestMethod.GET)
     public String userSucceess(HttpServletRequest request){
         logger.info("Loading User Success Home page");
-      HttpSession session = request.getSession(false);
+      /*HttpSession session = request.getSession(false);
       if(session == null){
         return "login";
-      }
+      }*/
         return "UserHome";
     }
 }
