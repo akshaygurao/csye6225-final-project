@@ -11,8 +11,6 @@ import com.csye6225.spring2018.controller.IndexControllerTest;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-@RunWith(SpringRunner.class)
-//@SpringBootTest(classes = IndexControllerTest.class)
 public class SpringBootWebApplicationTest {
 
 /*  @Ignore

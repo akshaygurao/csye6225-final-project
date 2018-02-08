@@ -28,6 +28,12 @@ configurations {
     providedRuntime
 }
 
+test {
+    useJUnit {
+        includeCategories 'com.csye6225.spring2018'
+    }
+}
+
 idea {
     module {
         downloadJavadoc = true
