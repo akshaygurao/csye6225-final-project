@@ -12,5 +12,5 @@ notifications:
   username:
     recipients:
       - gurao.a@husky.neu.edu
-      - subramanian.roh@husy.neu.edu
+      - subramanian.roh@husky.neu.edu
       - venkatakrishnan.v@husky.neu.edu
