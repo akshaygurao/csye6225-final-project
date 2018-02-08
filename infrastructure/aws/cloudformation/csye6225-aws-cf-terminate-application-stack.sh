@@ -14,6 +14,10 @@ fi
 
 id=$(aws cloudformation describe-stacks --stack-name $var1 --query "Stacks[*].StackId" --output text 2>&1)
 
+instance_id=$(aws cloudformation describe-stacks --stack-name $var1 --query "Stacks[*].Outputs[0].OutputValue" --output text 2>&1)
+
+aws ec2 modify-instance-attribute --instance-id $instance_id --no-disable-api-termination
+
 aws cloudformation delete-stack --stack-name $var1
 
 aws cloudformation wait stack-delete-complete --stack-name $var1
