@@ -15,12 +15,12 @@ public class User {
     @Column(name = "personID", unique=true, nullable = false)
     private int id;
 
-    @Column(name="Email")
+    @Column(name="email")
 //    @NotEmpty
 //    @Email
     private String email;
 
-    @Column(name = "Password")
+    @Column(name = "password")
 
     @NotEmpty(message = "Please enter your password.")
 //    @Size(min = 6, max = 15, message = "Your password must between 6 and 15 characters")
