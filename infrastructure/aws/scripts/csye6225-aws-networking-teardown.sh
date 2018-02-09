@@ -42,5 +42,3 @@ aws ec2 delete-internet-gateway --internet-gateway-id $gateway_id
 aws ec2 delete-vpc --vpc-id $vpc_id
 
 exit 0
-
-

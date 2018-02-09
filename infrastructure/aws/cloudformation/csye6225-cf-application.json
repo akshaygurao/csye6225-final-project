@@ -46,12 +46,12 @@
         "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
         "KeyName" : { "Ref" : "KeyName" },
         "ImageId" : { "Ref" : "AMIName"},
+        "DisableApiTermination" : "true",
         "BlockDeviceMappings" : [
                {
                   "DeviceName" : "/dev/sdm",
                   "Ebs" : {
                      "VolumeType" : { "Ref" : "RootVolumeType"},
-                     "DeleteOnTermination" : "false",
                      "VolumeSize" : "16"
                   }
                }
