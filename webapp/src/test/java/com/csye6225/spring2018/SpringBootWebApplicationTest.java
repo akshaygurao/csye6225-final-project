@@ -19,8 +19,8 @@ public class SpringBootWebApplicationTest {
 
 
   @Test
-  public void welcome() throws Exception {
-    System.out.println("Welcome! Test Successful");
+  public void simpleTest() throws Exception {
+    System.out.println("Test Successful");
   }
 
  // @Ignore
