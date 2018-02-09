@@ -13,40 +13,6 @@
 <div th:replace="fragments/header :: header"/>
 <body>
 <div th:replace="fragments/navigation :: navigation"/>
-<script>
-    $(document).ready(function () {
-
-        $("#registerform").submit(function (e) {
-
-            var email = $("#email").val();
-            var password = $("#password").val();
-            $.ajax({
-                type: 'POST',
-                url: 'http://localhost:8080/registerUser',
-                data:
-                    JSON.stringify({
-                        email: email,
-                        password: password
-                    }),
-                async: false,
-                dataType: 'json',
-                contentType: "application/json",
-
-                success: function (response) {
-                    window.alert("Registration successful!");
-                    window.open("/login");
-                    window.close();
-                },
-                error: function (xMLHttpRequest, textStatus, error) {
-                    window.alert("User already exists!");
-                    window.open("/register");
-                    window.close();
-                }
-            }).done();
-        });
-    });
-
-</script>
 <!-- Page Content -->
 <div class="container">
     <p>
@@ -54,7 +20,7 @@
     </p>
 
     <br></br>
-    <form class="form-horizontal" id="registerform" content="multipart/form-data">
+    <form class="form-horizontal" id="registerform" enctype="application/json" action="/login" method="post">
         <div class="form-group">
             <div class="col-sm-10">
                 <input type="email" class="form-control" id="email" placeholder="Email" name="email"></input>
@@ -65,6 +31,25 @@
     </form>
 
 </div>
+<script th:inline="javascript">
+    $("#registerform").submit(function (e) {
+        var object = {
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value
+        };
+        var json = JSON.stringify(object);
+        $.ajax({
+            url: '/registerUser',
+            type:'POST',
+            data:json,
+            dataType: 'json',
+            contentType: "application/json",
+            context: document.body,
+        }).then(function(){
+            $(this).redirect("/login");
+        })
+    })
+</script>
 <!-- /.container -->
 <div th:replace="fragments/footer :: footer"/>
 
