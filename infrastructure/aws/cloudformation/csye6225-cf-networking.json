@@ -116,6 +116,7 @@
         {
               "Type": "AWS::EC2::SecurityGroup",
               "Properties": {
+                "VpcId":{"Ref" : "myVPC"},
                 "GroupDescription": "Web server firewall rules",
                 "SecurityGroupIngress": [
                   {
@@ -144,6 +145,7 @@
                   "Type": "AWS::EC2::SecurityGroup",
                   "Properties": {
                     "GroupDescription": "DB server firewall rules",
+                    "VpcId":{"Ref" : "myVPC"},
                     "SecurityGroupIngress": [
                       {
                         "IpProtocol": "tcp",
@@ -154,7 +156,7 @@
                     ]
                   }
                 }
-        }
+
     },
     "Parameters":
     {
