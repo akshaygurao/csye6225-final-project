@@ -117,6 +117,7 @@
               "Type": "AWS::EC2::SecurityGroup",
               "Properties": {
                 "VpcId":{"Ref" : "myVPC"},
+                "Tags": [ {"Key" : "Name", "Value" : "csye-webapp"} ],
                 "GroupDescription": "Web server firewall rules",
                 "SecurityGroupIngress": [
                   {
@@ -145,14 +146,16 @@
                   "Type": "AWS::EC2::SecurityGroup",
                   "Properties": {
                     "GroupDescription": "DB server firewall rules",
+                    "Tags": [ {"Key" : "Name", "Value" : "csye-rds"} ],
                     "VpcId":{"Ref" : "myVPC"},
                     "SecurityGroupIngress": [
                       {
                         "IpProtocol": "tcp",
                         "FromPort": "3306",
                         "ToPort": "3306",
-                        "CidrIp": "10.0.0.0/24"
-                      }
+                        "SourceSecurityGroupId" : { "Fn::GetAtt":["webserverSecurityGroup","GroupId"]}
+                      },
+
                     ]
                   }
                 }
