@@ -21,6 +21,7 @@
       {
         "VpcId" : { "Ref" : "myVPC" },
         "CidrBlock" : "10.0.0.0/24",
+        "AvailabilityZone" : "us-east-1c",
         "Tags" : [ { "Key" : "Name", "Value" : "myWEBsubnet" } ]
       }
         },
@@ -44,14 +45,25 @@
     "SubnetId" : {"Ref":"webserverSubnet"}
   }
 },
-"dbserverSubnet" : {
+"dbserverSubnet1" : {
      "Type" : "AWS::EC2::Subnet",
      "Properties" : {
         "VpcId" : { "Ref" : "myVPC" },
+        "AvailabilityZone" : "us-east-1a",
         "CidrBlock" : "10.0.1.0/24",
-        "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet" } ]
+        "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet1" } ]
      }
   },
+  "dbserverSubnet2" : {
+       "Type" : "AWS::EC2::Subnet",
+       "Properties" : {
+          "VpcId" : { "Ref" : "myVPC" },
+          "AvailabilityZone" : "us-east-1b",
+          "CidrBlock" : "10.0.2.0/24",
+          "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet2" } ]
+       }
+    },
+
     "privateRouteTable":
         {
           "Type": "AWS::EC2::RouteTable",
@@ -64,14 +76,24 @@
               }
           }
         },
-        "dbserverprivatetableassociation":
+        "dbserverprivatetableassociation1":
         {
           "Type" : "AWS::EC2::SubnetRouteTableAssociation",
-          "Properties" : {
+          "Properties" :
+          {
             "RouteTableId" : {"Ref":"privateRouteTable"},
-            "SubnetId" : {"Ref":"dbserverSubnet"}
-        }
-},
+            "SubnetId" : {"Ref":"dbserverSubnet1"}
+          }
+        },
+        "dbserverprivatetableassociation2":
+        {
+          "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+          "Properties" :
+          {
+            "RouteTableId" : {"Ref":"privateRouteTable"},
+            "SubnetId" : {"Ref":"dbserverSubnet2"}
+          }
+        },
   "myGateway":
         {
         "Type": "AWS::EC2::InternetGateway",
@@ -144,6 +166,7 @@
             "dbserverSecurityGroup":
             {
                   "Type": "AWS::EC2::SecurityGroup",
+                  "DependsOn":"webserverSecurityGroup",
                   "Properties": {
                     "GroupDescription": "DB server firewall rules",
                     "Tags": [ {"Key" : "Name", "Value" : "csye-rds"} ],

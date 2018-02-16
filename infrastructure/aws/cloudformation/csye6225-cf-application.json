@@ -42,7 +42,10 @@
    "websg" : {
      "Type": "String"
    },
-   "dbsubnet" : {
+   "dbsubnet1" : {
+     "Type": "String"
+   },
+   "dbsubnet2" : {
      "Type": "String"
    },
    "rdssg" : {
@@ -123,7 +126,7 @@
       "EngineVersion" : "5.6.37",
       "MasterUsername" : "csye6225master",
       "MasterUserPassword" : "csye6225password",
-      "MultiAZ" : false,
+      "MultiAZ" : true,
       "PubliclyAccessible" : false,
       "VPCSecurityGroups" : [{ "Ref" : "rdssg" } ]
 
@@ -134,7 +137,7 @@
          "Type" : "AWS::RDS::DBSubnetGroup",
          "Properties" : {
            "DBSubnetGroupDescription" : "making a RDS subnet from my VPC",
-            "SubnetIds" : [{"Ref":"dbsubnet"}]
+            "SubnetIds" : [{"Ref":"dbsubnet1"}, {"Ref":"dbsubnet2"}]
          }
       }
 
