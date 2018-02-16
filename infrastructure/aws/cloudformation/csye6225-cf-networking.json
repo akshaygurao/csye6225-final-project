@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion" : "2010-09-09",
-    "Resources" : 
+    "Resources" :
     {
         "myVPC" :
         {
@@ -10,12 +10,91 @@
             "CidrBlock" : "10.0.0.0/16",
             "EnableDnsSupport" : "false",
             "EnableDnsHostnames" : "false",
-            "InstanceTenancy" : "dedicated",
             "Tags" : [ {"Key" : "Name", "Value" : { "Ref" : "vpcName" }} ]
          },
          "DependsOn":["myGateway"]
         },
-        "myGateway":
+        "webserverSubnet" :
+        {
+     "Type" : "AWS::EC2::Subnet",
+     "Properties" :
+      {
+        "VpcId" : { "Ref" : "myVPC" },
+        "CidrBlock" : "10.0.0.0/24",
+        "AvailabilityZone" : "us-east-1c",
+        "Tags" : [ { "Key" : "Name", "Value" : "myWEBsubnet" } ]
+      }
+        },
+        "publicRouteTable":
+        {
+          "Type": "AWS::EC2::RouteTable",
+          "Properties":
+          {
+              "Tags" : [ {"Key" : "Name", "Value" : { "Ref" : "publicroutetableName" }} ],
+              "VpcId":
+              {
+                  "Ref": "myVPC"
+              }
+          }
+        },
+        "webserverpublictableassociation":
+        {
+  "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+  "Properties" : {
+    "RouteTableId" : {"Ref":"publicRouteTable"},
+    "SubnetId" : {"Ref":"webserverSubnet"}
+  }
+},
+"dbserverSubnet1" : {
+     "Type" : "AWS::EC2::Subnet",
+     "Properties" : {
+        "VpcId" : { "Ref" : "myVPC" },
+        "AvailabilityZone" : "us-east-1a",
+        "CidrBlock" : "10.0.1.0/24",
+        "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet1" } ]
+     }
+  },
+  "dbserverSubnet2" : {
+       "Type" : "AWS::EC2::Subnet",
+       "Properties" : {
+          "VpcId" : { "Ref" : "myVPC" },
+          "AvailabilityZone" : "us-east-1b",
+          "CidrBlock" : "10.0.2.0/24",
+          "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet2" } ]
+       }
+    },
+
+    "privateRouteTable":
+        {
+          "Type": "AWS::EC2::RouteTable",
+          "Properties":
+          {
+              "Tags" : [ {"Key" : "Name", "Value" : { "Ref" : "privateroutetableName" }} ],
+              "VpcId":
+              {
+                  "Ref": "myVPC"
+              }
+          }
+        },
+        "dbserverprivatetableassociation1":
+        {
+          "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+          "Properties" :
+          {
+            "RouteTableId" : {"Ref":"privateRouteTable"},
+            "SubnetId" : {"Ref":"dbserverSubnet1"}
+          }
+        },
+        "dbserverprivatetableassociation2":
+        {
+          "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+          "Properties" :
+          {
+            "RouteTableId" : {"Ref":"privateRouteTable"},
+            "SubnetId" : {"Ref":"dbserverSubnet2"}
+          }
+        },
+  "myGateway":
         {
         "Type": "AWS::EC2::InternetGateway",
         "Properties":
@@ -23,18 +102,6 @@
             "Tags" : [ {"Key" : "Name", "Value" : { "Ref" : "gatewayName" }} ]
         }
         },
-      "myRouteTable":
-      {
-        "Type": "AWS::EC2::RouteTable",
-        "Properties":
-        {
-            "Tags" : [ {"Key" : "Name", "Value" : { "Ref" : "tableName" }} ],
-            "VpcId":
-            {
-                "Ref": "myVPC"
-            }
-        }
-      },
       "myFirstRoute":
       {
         "Type": "AWS::EC2::Route",
@@ -44,7 +111,7 @@
             "DestinationCidrBlock":"0.0.0.0/0",
             "RouteTableId":
             {
-                "Ref":"myRouteTable"
+                "Ref":"publicRouteTable"
             },
             "GatewayId":
             {
@@ -66,19 +133,72 @@
                     "Ref":"myGateway"
                 }
             }
-        }
-    },
+        },
+        "webserverSecurityGroup":
+        {
+              "Type": "AWS::EC2::SecurityGroup",
+              "Properties": {
+                "VpcId":{"Ref" : "myVPC"},
+                "Tags": [ {"Key" : "Name", "Value" : "csye-webapp"} ],
+                "GroupDescription": "Web server firewall rules",
+                "SecurityGroupIngress": [
+                  {
+                    "IpProtocol": "tcp",
+                    "FromPort": "80",
+                    "ToPort": "80",
+                    "CidrIp": "0.0.0.0/0"
+                  },
+                  {
+                    "IpProtocol": "tcp",
+                    "FromPort": "443",
+                    "ToPort": "443",
+                    "CidrIp": "0.0.0.0/0"
+                  },
+                  {
+                    "IpProtocol": "tcp",
+                    "FromPort": "22",
+                    "ToPort": "22",
+                    "CidrIp": "0.0.0.0/0"
+                  },
+                ]
+              }
+            },
+            "dbserverSecurityGroup":
+            {
+                  "Type": "AWS::EC2::SecurityGroup",
+                  "DependsOn":"webserverSecurityGroup",
+                  "Properties": {
+                    "GroupDescription": "DB server firewall rules",
+                    "Tags": [ {"Key" : "Name", "Value" : "csye-rds"} ],
+                    "VpcId":{"Ref" : "myVPC"},
+                    "SecurityGroupIngress": [
+                      {
+                        "IpProtocol": "tcp",
+                        "FromPort": "3306",
+                        "ToPort": "3306",
+                        "SourceSecurityGroupId" : { "Fn::GetAtt":["webserverSecurityGroup","GroupId"]}
+                      },
 
-    "Parameters":{
+                    ]
+                  }
+                }
+
+    },
+    "Parameters":
+    {
         "vpcName":{
             "Type":"String"
         },
         "gatewayName":{
             "Type":"String"
         },
-        "tableName":{
+        "privateroutetableName":{
+            "Type":"String"
+        },
+        "publicroutetableName":{
             "Type":"String"
         }
 
+
     }
-}     
+}
