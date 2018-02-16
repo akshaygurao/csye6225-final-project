@@ -68,6 +68,7 @@ public class UserController {
         User newUser = new User();
         newUser.setFirstname(String.valueOf(map.get("firstname")));
         newUser.setLastname(String.valueOf(map.get("lastname")));
+        newUser.setAbout(String.valueOf(map.get("about")));
             newUser.setPhoto_location("default");
         newUser.setEmail(String.valueOf(map.get("email")));
         newUser.setPassword(BCrypt.hashpw(String.valueOf(map.get("password")),BCrypt.gensalt()));

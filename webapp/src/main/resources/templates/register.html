@@ -70,6 +70,8 @@
                 <input th:type="text" class="form-control" id="firstname" placeholder="John" name="firstname" required="true"></input>
                 <label for="lastname">Last Name</label>
                 <input th:type="text" class="form-control" id="lastname" placeholder="Doe" name="lastname" required="true"></input>
+                <label for="about">About</label>
+                <input th:type="text" class="form-control" id="about" placeholder="I am ...." name="about" required="true" maxlength="140"/>
                 <label for="email">Email</label>
                 <input type="email" class="form-control" id="email" placeholder="john.doe@example.com" name="email" required="true"></input>
                 <label for="password">Password</label>
@@ -90,7 +92,8 @@
             email: document.getElementById("email").value,
             password: document.getElementById("password").value,
             firstname: document.getElementById("firstname").value,
-            lastname: document.getElementById("lastname").value
+            lastname: document.getElementById("lastname").value,
+            about: document.getElementById("about").value
         };
         var json = JSON.stringify(object);
         $.ajax({
