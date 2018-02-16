@@ -109,7 +109,7 @@
     "Type": "AWS::S3::Bucket",
     "Properties":
     {
-      "BucketName" : "s3.csye6225-spring2018-srohil.me",
+      "BucketName" : "s3.csye6225-spring2018-guraoa.me",
     }
   },
   "myRDSInstance":
