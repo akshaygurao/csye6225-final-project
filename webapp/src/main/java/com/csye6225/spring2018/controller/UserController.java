@@ -32,7 +32,7 @@ public class UserController {
     private UserRepository userRepository;
 
 
-    @RequestMapping(value="/loginUser", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+    @PostMapping(value="/loginUser", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public String login(@RequestBody String js, HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException {
         JSONParser parser = new JSONParser();
@@ -51,7 +51,7 @@ public class UserController {
         return new JsonObject().toString();
     }
 
-    @RequestMapping(value = "/registerUser", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+    @PostMapping(value = "/registerUser", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public String createUser(@RequestBody String json, HttpServletResponse response) throws ParseException, IOException {
         JSONParser parser = new JSONParser();
@@ -70,7 +70,7 @@ public class UserController {
         newUser.setLastname(String.valueOf(map.get("lastname")));
         newUser.setAbout(String.valueOf(map.get("about")));
         String destination = "/home/temp/google.png";
-            newUser.setPhoto_location(destination);
+        newUser.setPhoto_location(destination);
         newUser.setEmail(String.valueOf(map.get("email")));
         newUser.setPassword(BCrypt.hashpw(String.valueOf(map.get("password")),BCrypt.gensalt()));
         userRepository.save(newUser);
@@ -78,7 +78,7 @@ public class UserController {
         return js.toString();
     }
 
-    @RequestMapping(value = "/search", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+    @PostMapping(value = "/search", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public String searchUser(@RequestBody String json) throws ParseException {
         JSONParser parser = new JSONParser();

@@ -19,10 +19,11 @@
 <div class="container">
     <!--/*@thymesVar id="firstname" type="java"*/-->
     <!--/*@thymesVar id="lastname" type="java"*/-->
-    <!--/*@thymesVar id="photo_location" type="java"*/-->
+    <!--/*@thymesVar id="fileUrl" type="java"*/-->
 
-    <div class="col-sm-10">
-        <img th:src="@{http://localhost:8080/photo}" alt="Profile pic" width="200" height="200"/>
+    <div class="col-sm-10" th:if="${session.fileUrl}">
+        <img id="local" th:src="@{http://localhost:8080/photo}" alt="Profile pic" width="200" height="200"/>
+        <img id="s3" th:src="${fileUrl}" alt="Profile pic" width="200" height="200"/>
     </div>
 <br/>
     <h1>
@@ -35,7 +36,13 @@
         <h5><span th:text="${session.about}"></span></h5>
 </div>
 <!-- /.container -->
-
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+        document.querySelectorAll('img').forEach(function(img){
+            img.onerror = function(){this.style.display='none';};
+        })
+    });
+</script>
 <div th:replace="fragments/footer :: footer"/>
 </body>
 </html>
