@@ -24,4 +24,4 @@ notifications:
       - venkatakrishnan.v@husky.neu.edu
 branches:
   only:
-    - $BRANCH
+    - lecture6_lab
