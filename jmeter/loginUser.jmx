@@ -27,7 +27,9 @@
       </ThreadGroup>
       <hashTree>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
-          <stringProp name="filename">/home/vighnesh/Downloads/email_pass.csv</stringProp>
+
+          <stringProp name="filename">/email_pass.csv</stringProp>
+\
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="variableNames">email,password</stringProp>
           <boolProp name="ignoreFirstLine">false</boolProp>
