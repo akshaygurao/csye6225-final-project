@@ -17,7 +17,13 @@
 <div class="container">
     <h3>Edit your profile here!</h3>
     <br/><br/>
+    <div th:if="${session.photo_location}">
     <img th:src="@{http://localhost:8080/photo}" alt="Profile pic" width="200" height="200"/>
+    </div>
+    <div th:if="session.fileUrl">
+        <!--/*@thymesVar id="fileUrl" type="java"*/-->
+        <img th:src="${session.fileUrl}" alt="S3 pic" width="200" height="200" />
+    </div>
     <form class="form-horizontal" id="editform" enctype="multipart/form-data" action="/saveChanges" method="post">
         <div class="form-group">
             <div class="col-sm-10">
@@ -56,10 +62,11 @@
     </div>
 
     <div>
-        <form class="form-horizontal" id="displayimage" method="post" enctype="multipart/form-data" action="/deleteImage">
+        <form class="form-horizontal" id="displayimage" method="post" enctype="multipart/form-data" action="/deletePhoto">
             <input type="submit" class="btn btn-block" value="Delete Image"/>
         </form>
     </div>
+
 
 </div>
 </body>

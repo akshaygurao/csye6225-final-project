@@ -69,7 +69,8 @@ public class UserController {
         newUser.setFirstname(String.valueOf(map.get("firstname")));
         newUser.setLastname(String.valueOf(map.get("lastname")));
         newUser.setAbout(String.valueOf(map.get("about")));
-            newUser.setPhoto_location("default");
+        String destination = "/home/temp/google.png";
+            newUser.setPhoto_location(destination);
         newUser.setEmail(String.valueOf(map.get("email")));
         newUser.setPassword(BCrypt.hashpw(String.valueOf(map.get("password")),BCrypt.gensalt()));
         userRepository.save(newUser);
