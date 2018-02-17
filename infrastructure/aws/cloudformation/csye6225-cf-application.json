@@ -110,6 +110,7 @@
     "Properties":
     {
       "BucketName" : {"Ref":"domain"},
+
     }
   },
   "myRDSInstance":

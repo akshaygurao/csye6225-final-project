@@ -3,6 +3,7 @@ package com.csye6225.spring2018.controller;
 import com.csye6225.spring2018.UserRepository;
 import com.csye6225.spring2018.User;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.http.HttpResponse;
@@ -53,7 +54,6 @@ public class UserController {
     @RequestMapping(value = "/registerUser", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
     public String createUser(@RequestBody String json, HttpServletResponse response) throws ParseException, IOException {
-        logger.info("Registering user account with information");
         JSONParser parser = new JSONParser();
         HashMap<String, String> map = (HashMap<String, String>) parser.parse(json);
         JsonObject js = new JsonObject();
@@ -64,12 +64,33 @@ public class UserController {
                 return js.toString();
             }
         }
+        logger.info("Registering user account with information");
         User newUser = new User();
+        newUser.setFirstname(String.valueOf(map.get("firstname")));
+        newUser.setLastname(String.valueOf(map.get("lastname")));
+        newUser.setAbout(String.valueOf(map.get("about")));
+            newUser.setPhoto_location("default");
         newUser.setEmail(String.valueOf(map.get("email")));
         newUser.setPassword(BCrypt.hashpw(String.valueOf(map.get("password")),BCrypt.gensalt()));
         userRepository.save(newUser);
         js.addProperty("message", "User added successfully!");
         return js.toString();
     }
+
+    @RequestMapping(value = "/search", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+    @ResponseBody
+    public String searchUser(@RequestBody String json) throws ParseException {
+        JSONParser parser = new JSONParser();
+        HashMap<String, String> map = (HashMap<String, String>) parser.parse(json);
+        JsonArray jsonArray = new JsonArray();
+        for (User u : userRepository.findAll()){
+            if(u.getFirstname().contains(map.get("search")) || u.getLastname().contains(map.get("search"))){
+                String fullname = u.getFirstname() + " " + u.getLastname();
+                jsonArray.add(fullname);
+            }
+        }
+        return jsonArray.toString();
+    }
+
 }
 
