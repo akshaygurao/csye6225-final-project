@@ -1,10 +1,6 @@
 package com.csye6225.spring2018;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "user_table")
@@ -16,15 +12,23 @@ public class User {
     private int id;
 
     @Column(name="email")
-//    @NotEmpty
-//    @Email
     private String email;
 
     @Column(name = "password")
-
-    @NotEmpty(message = "Please enter your password.")
-//    @Size(min = 6, max = 15, message = "Your password must between 6 and 15 characters")
     private String password;
+
+    @Column(name = "photo_location")
+    private String photo_location;
+
+    @Column(name = "firstname")
+    private String firstname;
+
+    @Column(name = "lastname")
+    private String lastname;
+
+    @Column(name = "about")
+    private String about;
+
 
     public User(){
 
@@ -48,5 +52,37 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhoto_location() {
+        return photo_location;
+    }
+
+    public void setPhoto_location(String photo_location) {
+        this.photo_location = photo_location;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
     }
 }
