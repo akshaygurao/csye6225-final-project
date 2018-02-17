@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion" : "2010-09-09",
 
-  "Description" : "AWS CloudFormation Sample Template EC2InstanceWithSecurityGroupSample: Create an Amazon EC2 instance running the Amazon Linux AMI. The AMI is chosen based on the region in which the stack is run. This example creates an EC2 security group for the instance to give you SSH access. **WARNING** This template creates an Amazon EC2 instance. You will be billed for the AWS resources used if you create a stack from this template.",
+  "Description" : "AWS CloudFormation Template.",
 
   "Parameters" :
   {
@@ -49,6 +49,14 @@
      "Type": "String"
    },
    "domain" : {
+     "Type": "String"
+   },
+   "MasterUsername" : {
+     "NoEcho":"true",
+     "Type": "String"
+   },
+   "MasterUserPassword" : {
+     "NoEcho":"true",
      "Type": "String"
    },
 
@@ -125,8 +133,8 @@
       "DBSubnetGroupName" : { "Ref": "myDBSubnetGroup" },
       "Engine" : "mySQL",
       "EngineVersion" : "5.6.37",
-      "MasterUsername" : "csye6225master",
-      "MasterUserPassword" : "csye6225password",
+      "MasterUsername" : { "Ref" : "MasterUsername" },
+      "MasterUserPassword" : { "Ref" : "MasterUserPassword" },
       "MultiAZ" : false,
       "PubliclyAccessible" : false,
       "VPCSecurityGroups" : [{ "Ref" : "rdssg" } ]
