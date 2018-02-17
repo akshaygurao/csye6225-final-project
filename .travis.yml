@@ -10,6 +10,11 @@ script:
   - cd webapp
   - ./gradlew test
   - ./gradlew war
+  - cd build/libs
+  - ls -al
+  - cd ../../..
+  - pwd
+  - ls -al
 
 notifications:
   username:
@@ -17,3 +22,6 @@ notifications:
       - gurao.a@husky.neu.edu
       - subramanian.roh@husky.neu.edu
       - venkatakrishnan.v@husky.neu.edu
+branches:
+  only:
+    - $BRANCH
