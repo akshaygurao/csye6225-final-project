@@ -5,8 +5,6 @@ var1="$1"
 #echo $?
 
 # name=$(aws cloudformation wait stack-exists --stack-name $var1 2>&1)
-# #echo $name
-# #echo $?
 # validation code
 # if [[ -z $name ]];then
 # 	echo "the stack exists. please enter a different name"
