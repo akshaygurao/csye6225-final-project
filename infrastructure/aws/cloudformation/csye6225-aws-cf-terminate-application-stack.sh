@@ -17,6 +17,8 @@ id=$(aws cloudformation describe-stacks --stack-name $var1 --query "Stacks[*].St
 #
 # aws ec2 modify-instance-attribute --instance-id $instance_id --no-disable-api-termination
 
+#instance_id=$(aws cloudformation describe-stack-resources --stack-name $var1 --logical-resource-id EC2Instance --query "StackResources[0].PhysicalResourceId" --output text)
+
 aws cloudformation delete-stack --stack-name $var1
 
 aws cloudformation wait stack-delete-complete --stack-name $var1

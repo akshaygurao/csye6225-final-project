@@ -51,6 +51,9 @@
    "rdssg" : {
      "Type": "String"
    },
+   "domain" : {
+     "Type": "String"
+   },
 
 
    "RootVolumeType" : {
@@ -109,7 +112,8 @@
     "Type": "AWS::S3::Bucket",
     "Properties":
     {
-      "BucketName" : "s3.csye6225-spring2018-guraoa.me",
+      "BucketName" : {"Ref":"domain"},
+
     }
   },
   "myRDSInstance":
