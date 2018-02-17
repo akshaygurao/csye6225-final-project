@@ -28,6 +28,7 @@ branches:
 
 after_success:
   - pwd
+  - pwd
   - ls -al
   - mkdir codedeploy_artifact
   - zip -r csye-web-app-$TRAVIS_JOB_NUMBER.zip webapp/build/libs/ROOT.war infrastructure/aws/codedeploy/appspec.yml
