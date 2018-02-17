@@ -19,6 +19,7 @@
 build/**/*
 .gradle/**/*
 webapp/out/**/*
+webapp/src/main/resources/application-gurao.properties
 
 ### NetBeans ###
 nbproject/private/
@@ -28,3 +29,5 @@ dist/
 nbdist/
 .nb-gradle/
 
+### Configs ###
+infrastructure/aws/cloudformation/.parameters.json
