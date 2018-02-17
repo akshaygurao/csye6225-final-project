@@ -45,9 +45,6 @@
    "dbsubnet1" : {
      "Type": "String"
    },
-   "dbsubnet2" : {
-     "Type": "String"
-   },
    "rdssg" : {
      "Type": "String"
    },
@@ -140,7 +137,7 @@
          "Type" : "AWS::RDS::DBSubnetGroup",
          "Properties" : {
            "DBSubnetGroupDescription" : "making a RDS subnet from my VPC",
-            "SubnetIds" : [{"Ref":"dbsubnet1"}, {"Ref":"dbsubnet2"}]
+            "SubnetIds" : [{"Ref":"dbsubnet1"}, {"Ref":"websubnet"}]
          }
       }
 
