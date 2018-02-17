@@ -13,8 +13,8 @@ var1="$1"
 
 id=$(aws cloudformation describe-stacks --stack-name $var1 --query "Stacks[*].StackId" --output text 2>&1)
 
-#instance_id=$(aws cloudformation describe-stack-resources --stack-name $var1 --logical-resource-id EC2Instance --query "StackResources[0].PhysicalResourceId" --output text)
-# aws ec2 modify-instance-attribute --instance-id i-0d3486d81ce4db948 --no-disable-api-termination
+instance_id=$(aws cloudformation describe-stack-resources --stack-name $var1 --logical-resource-id EC2Instance --query "StackResources[0].PhysicalResourceId" --output text)
+aws ec2 modify-instance-attribute --instance-id $instance_id --no-disable-api-termination
 
 
 
