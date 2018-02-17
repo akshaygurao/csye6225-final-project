@@ -25,3 +25,19 @@ notifications:
 branches:
   only:
     - lecture6_lab
+
+after_success:
+  - pwd
+  - ls -al
+  - mkdir codedeploy
+  - zip -r csye-web-app-$TRAVIS_JOB_NUMBER.zip webapp/build/libs/ROOT.war infrastructure/aws/codedeploy/appspec.yml
+  - ls -al
+  - mv csye6225-web-app-$TRAVIS_JOB_NUMBER.zip codedeploy/
+  - ls -al
+  - pwd
+  - cd codedeploy
+  - ls -al
+  - pwd
+  - cd ..
+  - pwd
+  - ls -al
