@@ -1,10 +1,18 @@
 package com.csye6225.spring2018.controller;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.util.IOUtils;
+import com.csye6225.spring2018.AmazonClient;
 import com.csye6225.spring2018.User;
 import com.csye6225.spring2018.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +33,14 @@ public class IndexController {
   private UserRepository userRepository;
 
   private final static Logger logger = LoggerFactory.getLogger(IndexController.class);
+
+  private AmazonClient amazonClient;
+
+  @Autowired
+  IndexController(AmazonClient amazonClient) {
+    this.amazonClient = amazonClient;
+  }
+
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public String index() {
@@ -149,8 +165,21 @@ public class IndexController {
     return "editProfile";
   }
 
+  @RequestMapping(value = "/uploadToS3", method = RequestMethod.POST)
+  public String uploadToS3(@RequestPart("file") MultipartFile multipartFile, HttpServletRequest request){
+
+    HttpSession session = request.getSession(false);
+    if (session == null){
+      return "index";
+    }
+    this.amazonClient.uploadFile(multipartFile);
+    session.setAttribute("uploadMessage", "You successfully uploaded '" + multipartFile.getOriginalFilename() + "'");
+    return "editProfile";
+  }
+
   @RequestMapping(value = "/uploadPhoto", method = RequestMethod.POST)
-  public String uploadPhoto(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request, ModelMap modelMap) {
+  public String uploadPhoto(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request, ModelMap modelMap) throws IOException{
+
 
     HttpSession session = request.getSession(false);
     logger.info("Attempting to save file by using post method");
@@ -172,11 +201,14 @@ public class IndexController {
           session.setAttribute("uploadMessage", "You successfully uploaded '" + multipartFile.getOriginalFilename() + "'");
           session.setAttribute("photo", file);
           modelMap.addAttribute("photo",file);
+
         }
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
+
+
 
     return "editProfile";
   }
@@ -192,6 +224,17 @@ public class IndexController {
     file.delete();
     session.setAttribute("uploadMessage","");
     session.setAttribute("deleteMessage", "You have successfully deleted the photo");
+    return "editProfile";
+  }
+
+  @RequestMapping(value = "/deleteImageS3", method = RequestMethod.POST)
+  public String deleteImageS3(HttpServletRequest request){
+    HttpSession session = request.getSession(false);
+    if(session == null){
+      return "index";
+    }
+    String fileUrl = String.valueOf(session.getAttribute("photo_location"));
+    this.amazonClient.deleteFileFromS3Bucket(fileUrl);
     return "editProfile";
   }
 

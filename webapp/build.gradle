@@ -8,6 +8,10 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
+
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE"
+    }
 }
 
 apply plugin: 'java'
@@ -16,6 +20,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 apply plugin: 'idea'
 apply plugin: 'groovy'
+apply plugin: "io.spring.dependency-management"
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
@@ -103,9 +108,17 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-io/commons-io
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
 
+    compile 'com.amazonaws:aws-java-sdk-s3'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
 }
 
 war {
     archiveName = 'ROOT.war'
 }
 
+dependencyManagement {
+    imports {
+        mavenBom 'com.amazonaws:aws-java-sdk-bom:1.11.228'
+    }
+}
