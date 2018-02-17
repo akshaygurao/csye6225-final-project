@@ -45,9 +45,6 @@
    "dbsubnet1" : {
      "Type": "String"
    },
-   "dbsubnet2" : {
-     "Type": "String"
-   },
    "rdssg" : {
      "Type": "String"
    },
@@ -71,7 +68,7 @@
         "SubnetId": {"Ref" : "websubnet" },
         "KeyName" : { "Ref" : "KeyName" },
         "ImageId" : { "Ref" : "AMIName"},
-        "DisableApiTermination" : false,
+        "DisableApiTermination" : true,
         "BlockDeviceMappings" : [
                {
                   "DeviceName" : "/dev/sdm",
@@ -130,7 +127,7 @@
       "EngineVersion" : "5.6.37",
       "MasterUsername" : "csye6225master",
       "MasterUserPassword" : "csye6225password",
-      "MultiAZ" : true,
+      "MultiAZ" : false,
       "PubliclyAccessible" : false,
       "VPCSecurityGroups" : [{ "Ref" : "rdssg" } ]
 
@@ -141,7 +138,7 @@
          "Type" : "AWS::RDS::DBSubnetGroup",
          "Properties" : {
            "DBSubnetGroupDescription" : "making a RDS subnet from my VPC",
-            "SubnetIds" : [{"Ref":"dbsubnet1"}, {"Ref":"dbsubnet2"}]
+            "SubnetIds" : [{"Ref":"dbsubnet1"}, {"Ref":"websubnet"}]
          }
       }
 

@@ -54,15 +54,6 @@
         "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet1" } ]
      }
   },
-  "dbserverSubnet2" : {
-       "Type" : "AWS::EC2::Subnet",
-       "Properties" : {
-          "VpcId" : { "Ref" : "myVPC" },
-          "AvailabilityZone" : "us-east-1b",
-          "CidrBlock" : "10.0.2.0/24",
-          "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet2" } ]
-       }
-    },
 
     "privateRouteTable":
         {
@@ -83,15 +74,6 @@
           {
             "RouteTableId" : {"Ref":"privateRouteTable"},
             "SubnetId" : {"Ref":"dbserverSubnet1"}
-          }
-        },
-        "dbserverprivatetableassociation2":
-        {
-          "Type" : "AWS::EC2::SubnetRouteTableAssociation",
-          "Properties" :
-          {
-            "RouteTableId" : {"Ref":"privateRouteTable"},
-            "SubnetId" : {"Ref":"dbserverSubnet2"}
           }
         },
   "myGateway":
