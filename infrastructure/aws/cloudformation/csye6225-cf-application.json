@@ -32,22 +32,6 @@
    "AMIName" : {
      "Type": "String"
    },
-
-   "vpcid" : {
-     "Type": "String"
-   },
-   "websubnet" : {
-     "Type": "String"
-   },
-   "websg" : {
-     "Type": "String"
-   },
-   "dbsubnet1" : {
-     "Type": "String"
-   },
-   "rdssg" : {
-     "Type": "String"
-   },
    "domain" : {
      "Type": "String"
    },
@@ -72,8 +56,8 @@
       "Type" : "AWS::EC2::Instance",
       "Properties" : {
         "InstanceType" : { "Ref" : "InstanceType" },
-        "SecurityGroupIds" : [ { "Ref" : "websg" } ],
-        "SubnetId": {"Ref" : "websubnet" },
+        "SecurityGroupIds" : [ { "Fn::ImportValue" :"websg"} ],
+        "SubnetId": {"Fn::ImportValue" : "websubnet" },
         "KeyName" : { "Ref" : "KeyName" },
         "ImageId" : { "Ref" : "AMIName"},
         "DisableApiTermination" : true,
@@ -137,7 +121,7 @@
       "MasterUserPassword" : { "Ref" : "MasterUserPassword" },
       "MultiAZ" : false,
       "PubliclyAccessible" : false,
-      "VPCSecurityGroups" : [{ "Ref" : "rdssg" } ]
+      "VPCSecurityGroups" : [{ "Fn::ImportValue" : "dbsg" } ]
 
     }
   },
@@ -146,7 +130,7 @@
          "Type" : "AWS::RDS::DBSubnetGroup",
          "Properties" : {
            "DBSubnetGroupDescription" : "making a RDS subnet from my VPC",
-            "SubnetIds" : [{"Ref":"dbsubnet1"}, {"Ref":"websubnet"}]
+            "SubnetIds" : [{"Fn::ImportValue" :"dbsubnet1"}, {"Fn::ImportValue" :"websubnet"}]
          }
       }
 
