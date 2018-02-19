@@ -1,9 +1,10 @@
 {
   "AWSTemplateFormatVersion" : "2010-09-09",
 
-  "Description" : "AWS CloudFormation Sample Template EC2InstanceWithSecurityGroupSample: Create an Amazon EC2 instance running the Amazon Linux AMI. The AMI is chosen based on the region in which the stack is run. This example creates an EC2 security group for the instance to give you SSH access. **WARNING** This template creates an Amazon EC2 instance. You will be billed for the AWS resources used if you create a stack from this template.",
+  "Description" : "AWS CloudFormation Template.",
 
-  "Parameters" : {
+  "Parameters" :
+  {
     "KeyName": {
       "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instance",
       "Type": "AWS::EC2::KeyPair::KeyName",
@@ -32,6 +33,34 @@
      "Type": "String"
    },
 
+   "vpcid" : {
+     "Type": "String"
+   },
+   "websubnet" : {
+     "Type": "String"
+   },
+   "websg" : {
+     "Type": "String"
+   },
+   "dbsubnet1" : {
+     "Type": "String"
+   },
+   "rdssg" : {
+     "Type": "String"
+   },
+   "domain" : {
+     "Type": "String"
+   },
+   "MasterUsername" : {
+     "NoEcho":"true",
+     "Type": "String"
+   },
+   "MasterUserPassword" : {
+     "NoEcho":"true",
+     "Type": "String"
+   },
+
+
    "RootVolumeType" : {
      "Type": "String"
    }
@@ -43,10 +72,11 @@
       "Type" : "AWS::EC2::Instance",
       "Properties" : {
         "InstanceType" : { "Ref" : "InstanceType" },
-        "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
+        "SecurityGroupIds" : [ { "Ref" : "websg" } ],
+        "SubnetId": {"Ref" : "websubnet" },
         "KeyName" : { "Ref" : "KeyName" },
         "ImageId" : { "Ref" : "AMIName"},
-        "DisableApiTermination" : "true",
+        "DisableApiTermination" : true,
         "BlockDeviceMappings" : [
                {
                   "DeviceName" : "/dev/sdm",
@@ -58,37 +88,67 @@
       ]
     }
     },
-
-    "InstanceSecurityGroup" : {
-      "Type" : "AWS::EC2::SecurityGroup",
+    "myDynamoDBTable" :
+    {
+      "Type" : "AWS::DynamoDB::Table",
       "Properties" : {
-        "GroupDescription" : "Enable SSH access via port 22",
-        "SecurityGroupIngress" : [ {
-          "IpProtocol" : "tcp",
-          "FromPort" : "22",
-          "ToPort" : "22",
-          "CidrIp" : { "Ref" : "SSHLocation"}
-        } ]
-      }
+        "AttributeDefinitions" : [
+          {
+            "AttributeName" : "id",
+            "AttributeType" : "S"
+          }
+        ],
+        "KeySchema" : [
+          {
+            "AttributeName" : "id",
+            "KeyType" : "HASH"
+          }
+        ],
+        "TableName" : "csye6225",
+        "ProvisionedThroughput":
+        { "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        },
+
+    }
+  },
+  "myS3Bucket":
+  {
+    "Type": "AWS::S3::Bucket",
+    "Properties":
+    {
+      "BucketName" : {"Ref":"domain"},
+
+    }
+  },
+  "myRDSInstance":
+  {
+    "Type" : "AWS::RDS::DBInstance",
+    "Properties" :
+    {
+      "AllocatedStorage" : "5",
+      "DBInstanceClass" : "db.t2.medium",
+      "DBInstanceIdentifier" : "csye6225-spring2018",
+      "DBName" : "csye6225",
+      "DBSubnetGroupName" : { "Ref": "myDBSubnetGroup" },
+      "Engine" : "mySQL",
+      "EngineVersion" : "5.6.37",
+      "MasterUsername" : { "Ref" : "MasterUsername" },
+      "MasterUserPassword" : { "Ref" : "MasterUserPassword" },
+      "MultiAZ" : false,
+      "PubliclyAccessible" : false,
+      "VPCSecurityGroups" : [{ "Ref" : "rdssg" } ]
+
     }
   },
 
-  "Outputs" : {
-    "InstanceId" : {
-      "Description" : "InstanceId of the newly created EC2 instance",
-      "Value" : { "Ref" : "EC2Instance" }
-    },
-    "AZ" : {
-      "Description" : "Availability Zone of the newly created EC2 instance",
-      "Value" : { "Fn::GetAtt" : [ "EC2Instance", "AvailabilityZone" ] }
-    },
-    "PublicDNS" : {
-      "Description" : "Public DNSName of the newly created EC2 instance",
-      "Value" : { "Fn::GetAtt" : [ "EC2Instance", "PublicDnsName" ] }
-    },
-    "PublicIP" : {
-      "Description" : "Public IP address of the newly created EC2 instance",
-      "Value" : { "Fn::GetAtt" : [ "EC2Instance", "PublicIp" ] }
-    }
-  }
+  "myDBSubnetGroup" : {
+         "Type" : "AWS::RDS::DBSubnetGroup",
+         "Properties" : {
+           "DBSubnetGroupDescription" : "making a RDS subnet from my VPC",
+            "SubnetIds" : [{"Ref":"dbsubnet1"}, {"Ref":"websubnet"}]
+         }
+      }
+
+}
 }
