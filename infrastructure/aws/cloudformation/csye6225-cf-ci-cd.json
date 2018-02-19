@@ -1,4 +1,16 @@
 {
+
+  "Parameters":
+  {
+    "arn" : {
+      "Type": "String",
+      "NoEcho":"true"
+    },
+    "domain" : {
+      "Type": "String",
+      "NoEcho":"true"
+    },
+  },
   "Resources":
   {
     "mycodeDeployPolicy":
@@ -17,7 +29,7 @@
                         "s3:List*"
                     ],
                     "Effect": "Allow",
-                    "Resource": "arn:aws:s3:::s3.csye6225-spring2018-srohil.me/*"
+                    "Resource": {"Ref":"arn"}
                 }
             ]
           },
@@ -38,7 +50,7 @@
                         "s3:PutObject",
                     ],
                     "Effect": "Allow",
-                    "Resource": "arn:aws:s3:::s3.csye6225-spring2018-srohil.me/*"
+                    "Resource": {"Ref":"arn"}
                 }
             ]
           },
@@ -62,6 +74,15 @@
           "Users":["travis"]
         }
 
+      },
+      "myS3Bucket":
+      {
+        "Type": "AWS::S3::Bucket",
+        "Properties":
+        {
+          "BucketName" : {"Ref":"domain"},
+
+        }
       },
     "myEC2Role":
     {
@@ -131,7 +152,7 @@
                 "elasticloadbalancing:DeregisterTargets"
             ],
             "Resource": "*"
-        }
+            }
                         ]
         }
 
