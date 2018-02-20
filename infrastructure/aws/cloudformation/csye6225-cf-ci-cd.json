@@ -1,28 +1,18 @@
 {
+
+  "Parameters":
+  {
+    "arn" : {
+      "Type": "String",
+      "NoEcho":"true"
+    },
+    "domain" : {
+      "Type": "String",
+      "NoEcho":"true"
+    }
+  },
   "Resources":
   {
-    "mycodeDeployPolicy":
-    {
-      "Type":"AWS::IAM::Policy",
-      "Properties":
-      {
-          "PolicyName":"CodeDeploy-EC2-S3",
-          "PolicyDocument":
-          {
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                    "Action": [
-                        "s3:Get*",
-                        "s3:List*"
-                    ],
-                    "Effect": "Allow",
-                    "Resource": "arn:aws:s3:::s3.csye6225-spring2018-srohil.me/*"
-                }
-            ]
-          },
-        }
-      },
       "myTravistoS3Policy":
       {
         "Type":"AWS::IAM::Policy",
@@ -35,10 +25,10 @@
             "Statement": [
                 {
                     "Action": [
-                        "s3:PutObject",
+                        "s3:PutObject"
                     ],
                     "Effect": "Allow",
-                    "Resource": "arn:aws:s3:::s3.csye6225-spring2018-srohil.me/*"
+                    "Resource": {"Ref":"arn"}
                 }
             ]
           },
@@ -54,12 +44,81 @@
           "PolicyDocument":
           {
             "Version": "2012-10-17",
-            "Statement":
-            [
-
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action":
+                [
+                  "codedeploy:RegisterApplicationRevision",
+                  "codedeploy:GetApplicationRevision"
+                ],
+                "Resource":
+                [
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-subramanianroh:application:testapp"
+                ]
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "codedeploy:CreateDeployment",
+                  "codedeploy:GetDeployment"
+                ],
+                "Resource":
+                [
+                  "*"
+                ]
+              },
+              {
+                "Effect": "Allow",
+                "Action":
+                [
+                  "codedeploy:GetDeploymentConfig"
+                ],
+                "Resource":
+                [
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-subramanianroh:deploymentconfig:CodeDeployDefault.OneAtATime",
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-subramanianroh:deploymentconfig:CodeDeployDefault.HalfAtATime",
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-subramanianroh:deploymentconfig:CodeDeployDefault.AllAtOnce"
+                ]
+              }
             ]
           },
-          "Users":["travis"]
+            "Users":["travis"]
+        }
+
+      },
+      "myS3Bucket":
+      {
+        "Type": "AWS::S3::Bucket",
+        "Properties":
+        {
+          "BucketName" : {"Ref":"domain"}
+
+        }
+      },
+      "myCodeDeployApp":
+      {
+        "Type" : "AWS::CodeDeploy::Application",
+        "Properties" : {
+          "ApplicationName" : "testapp",
+          "ComputePlatform" : "Server"
+        }
+      },
+      "myDeploymentGroup":
+      {
+        "Type" : "AWS::CodeDeploy::DeploymentGroup",
+        "Properties" :
+        {
+          "ApplicationName" : {"Ref" : "myCodeDeployApp"},
+          "Ec2TagFilters":
+          [
+            {
+              "Key" : "Name",
+              "Value" : "myEC2Instance",
+              "Type" : "KEY_AND_VALUE"
+          }
+        ],
+          "ServiceRoleArn" : {"Fn::GetAtt" : ["myCodeDeployRole", "Arn"]}
         }
 
       },
@@ -72,9 +131,39 @@
         "AssumeRolePolicyDocument":
         {
 
-          "Fn::GetAtt":["mycodeDeployPolicy","PolicyDocument"]
-
-        }
+          "Version" : "2012-10-17",
+          "Statement":
+            [
+              {
+                 "Effect": "Allow",
+                 "Principal":
+                 {
+                    "Service": [ "ec2.amazonaws.com" ]
+                 },
+                 "Action": [ "sts:AssumeRole" ]
+              }
+            ]
+        },
+        "Policies":
+        [
+          {
+            "PolicyName":"CodeDeploy-EC2-S3",
+            "PolicyDocument":
+            {
+              "Version": "2012-10-17",
+              "Statement": [
+                  {
+                      "Action": [
+                          "s3:Get*",
+                          "s3:List*"
+                      ],
+                      "Effect": "Allow",
+                      "Resource": {"Ref":"arn"}
+                  }
+              ]
+            }
+          }
+        ]
       }
     },
     "myCodeDeployRole":
@@ -85,61 +174,38 @@
         "RoleName":"CodeDeployServiceRole",
         "AssumeRolePolicyDocument":
         {
-          "Version": "2012-10-17",
-          "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "autoscaling:CompleteLifecycleAction",
-                "autoscaling:DeleteLifecycleHook",
-                "autoscaling:DescribeAutoScalingGroups",
-                "autoscaling:DescribeLifecycleHooks",
-                "autoscaling:PutLifecycleHook",
-                "autoscaling:RecordLifecycleActionHeartbeat",
-                "autoscaling:CreateAutoScalingGroup",
-                "autoscaling:UpdateAutoScalingGroup",
-                "autoscaling:EnableMetricsCollection",
-                "autoscaling:DescribeAutoScalingGroups",
-                "autoscaling:DescribePolicies",
-                "autoscaling:DescribeScheduledActions",
-                "autoscaling:DescribeNotificationConfigurations",
-                "autoscaling:DescribeLifecycleHooks",
-                "autoscaling:SuspendProcesses",
-                "autoscaling:ResumeProcesses",
-                "autoscaling:AttachLoadBalancers",
-                "autoscaling:PutScalingPolicy",
-                "autoscaling:PutScheduledUpdateGroupAction",
-                "autoscaling:PutNotificationConfiguration",
-                "autoscaling:PutLifecycleHook",
-                "autoscaling:DescribeScalingActivities",
-                "autoscaling:DeleteAutoScalingGroup",
-                "ec2:DescribeInstances",
-                "ec2:DescribeInstanceStatus",
-                "ec2:TerminateInstances",
-                "tag:GetTags",
-                "tag:GetResources",
-                "sns:Publish",
-                "cloudwatch:DescribeAlarms",
-                "cloudwatch:PutMetricAlarm",
-                "elasticloadbalancing:DescribeLoadBalancers",
-                "elasticloadbalancing:DescribeInstanceHealth",
-                "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-                "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-                "elasticloadbalancing:DescribeTargetGroups",
-                "elasticloadbalancing:DescribeTargetHealth",
-                "elasticloadbalancing:RegisterTargets",
-                "elasticloadbalancing:DeregisterTargets"
-            ],
-            "Resource": "*"
-        }
-                        ]
-        }
+
+          "Version" : "2012-10-17",
+          "Statement":
+            [
+              {
+                 "Effect": "Allow",
+                 "Principal":
+                 {
+                    "Service": [ "codedeploy.amazonaws.com" ]
+                 },
+                 "Action": [ "sts:AssumeRole" ]
+              }
+            ]
+        },
+        "ManagedPolicyArns":
+        [
+          "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
+        ]
 
         }
     }
 
-  }
+  },
+  "Outputs" : {
+    "EC2IAMRole" : {
+      "Description" : "S3 bucket arn",
+      "Value" : { "Ref":"myEC2Role" },
+      "Export" : {"Name" : "ec2iamrole"}
+
+    }
 
 
 
+}
 }

@@ -209,6 +209,13 @@
       "Export" : {"Name" : "websubnet"}
 
     },
+    "websubnetzone" : {
+      "Description" : "web server subnet availability zone",
+      "Value" : { "Fn::GetAtt" : [ "mySubnet", "AvailabilityZone" ] },
+      "Export" : {"Name" : "websubnetzone"}
+
+    },
+
     "dbsubnet1ID" : {
       "Description" : "Availability Zone 1 of the DB server",
       "Value" : { "Ref" : "dbserverSubnet1" },
