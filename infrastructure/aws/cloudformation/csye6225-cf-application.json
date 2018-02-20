@@ -55,11 +55,14 @@
     "EC2Instance" : {
       "Type" : "AWS::EC2::Instance",
       "Properties" : {
+        "AvailabilityZone" : "us-east-1c",
         "InstanceType" : { "Ref" : "InstanceType" },
         "SecurityGroupIds" : [ { "Fn::ImportValue" :"websg"} ],
         "SubnetId": {"Fn::ImportValue" : "websubnet" },
         "KeyName" : { "Ref" : "KeyName" },
         "ImageId" : { "Ref" : "AMIName"},
+        "IamInstanceProfile": {"Ref":"myInstanceProfile"},
+        "Tags" : [ { "Key" : "Name", "Value" : "myEC2Instance" } ],
         "DisableApiTermination" : true,
         "BlockDeviceMappings" : [
                {
@@ -71,6 +74,14 @@
                }
       ]
     }
+    },
+    "myInstanceProfile":
+    {
+        "Type": "AWS::IAM::InstanceProfile",
+        "Properties": {
+        "Roles": [ { "Fn::ImportValue" : "ec2iamrole" }],
+        "InstanceProfileName": "myProfile"
+  }
     },
     "myDynamoDBTable" :
     {
@@ -134,5 +145,13 @@
          }
       }
 
+},
+"Outputs" : {
+  "S3BucketID" : {
+    "Description" : "S3 bucket arn",
+    "Value" : { "Fn::GetAtt" : [ "myS3Bucket", "Arn" ] },
+    "Export" : {"Name" : "s3BucketARN"}
+
+  }
 }
 }

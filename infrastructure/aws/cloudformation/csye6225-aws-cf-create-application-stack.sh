@@ -26,7 +26,7 @@ Stack_Name="$1"
 # fi
 
 
-aws cloudformation create-stack --template-body file://csye6225-cf-application.json --stack-name $Stack_Name --parameters file://parameters-application.json
+aws cloudformation create-stack --template-body file://csye6225-cf-application.json --stack-name $Stack_Name --parameters file://parameters-application.json --capabilities CAPABILITY_NAMED_IAM
 
 aws cloudformation wait stack-create-complete --stack-name $Stack_Name
 
