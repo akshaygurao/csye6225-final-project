@@ -60,6 +60,12 @@ public class IndexController {
     return "login";
   }
 
+  @PostMapping("/login")
+  public String loginPost(){
+    logger.info("Logging in after successful authentication");
+    return "login";
+  }
+
   @GetMapping("/logout")
   public String logoutPage(HttpServletRequest request){
     logger.info("Loading index page after logging out.");
