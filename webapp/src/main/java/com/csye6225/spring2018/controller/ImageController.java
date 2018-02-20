@@ -60,8 +60,10 @@ public class ImageController {
                     else {
                         try {
                             File file = new File(existPic);
-                            if (file.exists()) {
-                                file.delete();
+                            if (!existPic.equalsIgnoreCase("/home/temp/google.png")) {
+                                if (file.exists()) {
+                                    file.delete();
+                                }
                             }
                             String fileUrl = "/home/temp/" + u.getId() + multipartFile.getOriginalFilename();
                             multipartFile.transferTo(file);
@@ -97,7 +99,9 @@ public class ImageController {
                     session.setAttribute("deleteMessage", deleteMsg);
                 } else {
                     File file = new File(fileUrl);
-                    file.delete();
+                    if (!fileUrl.equalsIgnoreCase("/home/temp/google.png")) {
+                        file.delete();
+                    }
                     u.setPhoto_location(destination);
                     session.setAttribute("fileUrl", destination);
                     session.setAttribute("deleteMessage", "You have successfully deleted the photo");
