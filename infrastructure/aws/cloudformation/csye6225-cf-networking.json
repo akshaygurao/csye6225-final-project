@@ -211,7 +211,7 @@
     },
     "websubnetzone" : {
       "Description" : "web server subnet availability zone",
-      "Value" : { "Fn::GetAtt" : [ "mySubnet", "AvailabilityZone" ] },
+      "Value" : { "Fn::GetAtt" : [ "webserverSubnet", "AvailabilityZone" ] },
       "Export" : {"Name" : "websubnetzone"}
 
     },
