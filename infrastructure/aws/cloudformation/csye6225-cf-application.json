@@ -58,7 +58,6 @@
         "AvailabilityZone" : "us-east-1c",
         "InstanceType" : { "Ref" : "InstanceType" },
         "SecurityGroupIds" : [ { "Fn::ImportValue" :"websg"} ],
-        "SubnetId": {"Fn::ImportValue" : "websubnet" },
         "UserData":
         {
           "Fn::Base64":
@@ -83,7 +82,9 @@
                 "sudo service tomcat8 restart \n"
             ]
         ]
+          }
       },
+        "SubnetId": {"Fn::ImportValue" : "websubnet" },
         "KeyName" : { "Ref" : "KeyName" },
         "ImageId" : { "Ref" : "AMIName"},
         "IamInstanceProfile": {"Ref":"myInstanceProfile"},
