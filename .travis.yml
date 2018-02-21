@@ -31,7 +31,7 @@ after_success:
   - pwd
   - ls -al
   - mkdir codedeploy_artifact
-  - zip -r csye-web-app-$TRAVIS_JOB_NUMBER.zip webapp/build/libs/ROOT.war infrastructure/aws/codedeploy/appspec.yml
+  - zip -r csye-web-app-$TRAVIS_JOB_NUMBER.zip webapp/build/libs/ROOT.war infrastructure/aws/codedeploy
   - ls -al
   - mv csye-web-app-$TRAVIS_JOB_NUMBER.zip codedeploy_artifact/
   - ls -al
