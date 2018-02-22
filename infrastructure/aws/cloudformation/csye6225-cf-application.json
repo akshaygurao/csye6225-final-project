@@ -58,6 +58,32 @@
         "AvailabilityZone" : "us-east-1c",
         "InstanceType" : { "Ref" : "InstanceType" },
         "SecurityGroupIds" : [ { "Fn::ImportValue" :"websg"} ],
+        "UserData":
+        {
+          "Fn::Base64":
+          {
+            "Fn::Join":
+            [
+            "",
+              [
+                "#!/bin/bash -xe \n",
+                "sudo apt-get update \n",
+                "sudo apt-get install openjdk-8-jdk -y\n",
+                "sudo apt-get install ruby -y \n",
+                "sudo apt-get install wget -y \n",
+                "sudo apt-get install python -y \n",
+                "sudo apt-get update \n",
+                "sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
+                "sudo chmod +x ./install \n",
+                "sudo ./install auto \n",
+                "sudo service codedeploy-agent start \n",
+                "sudo apt-get install tomcat8 -y \n",
+                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 \n",
+                "sudo service tomcat8 restart \n"
+            ]
+        ]
+          }
+      },
         "SubnetId": {"Fn::ImportValue" : "websubnet" },
         "KeyName" : { "Ref" : "KeyName" },
         "ImageId" : { "Ref" : "AMIName"},
@@ -66,7 +92,7 @@
         "DisableApiTermination" : true,
         "BlockDeviceMappings" : [
                {
-                  "DeviceName" : "/dev/sdm",
+                  "DeviceName" : "/dev/sda1",
                   "Ebs" : {
                      "VolumeType" : { "Ref" : "RootVolumeType"},
                      "VolumeSize" : "16"

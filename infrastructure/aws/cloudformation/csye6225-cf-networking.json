@@ -8,22 +8,23 @@
          "Properties":
          {
             "CidrBlock" : "10.0.0.0/16",
-            "EnableDnsSupport" : "false",
-            "EnableDnsHostnames" : "false",
+            "EnableDnsSupport" : "true",
+            "EnableDnsHostnames" : "true",
             "Tags" : [ {"Key" : "Name", "Value" : { "Ref" : "vpcName" }} ]
          },
          "DependsOn":["myGateway"]
         },
         "webserverSubnet" :
         {
-     "Type" : "AWS::EC2::Subnet",
-     "Properties" :
-      {
-        "VpcId" : { "Ref" : "myVPC" },
-        "CidrBlock" : "10.0.0.0/24",
-        "AvailabilityZone" : "us-east-1c",
-        "Tags" : [ { "Key" : "Name", "Value" : "myWEBsubnet" } ]
-      }
+          "Type" : "AWS::EC2::Subnet",
+          "Properties" :
+          {
+            "VpcId" : { "Ref" : "myVPC" },
+            "MapPublicIpOnLaunch": "true",
+            "CidrBlock" : "10.0.0.0/24",
+            "AvailabilityZone" : "us-east-1c",
+            "Tags" : [ { "Key" : "Name", "Value" : "myWEBsubnet" } ]
+          }
         },
         "publicRouteTable":
         {
@@ -39,30 +40,35 @@
         },
         "webserverpublictableassociation":
         {
-  "Type" : "AWS::EC2::SubnetRouteTableAssociation",
-  "Properties" : {
-    "RouteTableId" : {"Ref":"publicRouteTable"},
-    "SubnetId" : {"Ref":"webserverSubnet"}
-  }
-},
-"dbserverSubnet1" : {
-     "Type" : "AWS::EC2::Subnet",
-     "Properties" : {
-        "VpcId" : { "Ref" : "myVPC" },
-        "AvailabilityZone" : "us-east-1a",
-        "CidrBlock" : "10.0.1.0/24",
-        "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet1" } ]
-     }
-  },
-  "dbserverSubnet2" : {
-       "Type" : "AWS::EC2::Subnet",
-       "Properties" : {
-          "VpcId" : { "Ref" : "myVPC" },
-          "AvailabilityZone" : "us-east-1b",
-          "CidrBlock" : "10.0.2.0/24",
-          "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet2" } ]
-       }
-    },
+          "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+          "Properties" :
+          {
+            "RouteTableId" : {"Ref":"publicRouteTable"},
+            "SubnetId" : {"Ref":"webserverSubnet"}
+          }
+        },
+        "dbserverSubnet1" :
+        {
+          "Type" : "AWS::EC2::Subnet",
+          "Properties" :
+          {
+            "VpcId" : { "Ref" : "myVPC" },
+            "AvailabilityZone" : "us-east-1a",
+            "CidrBlock" : "10.0.1.0/24",
+            "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet1" } ]
+          }
+        },
+        "dbserverSubnet2" :
+        {
+          "Type" : "AWS::EC2::Subnet",
+          "Properties" :
+          {
+            "VpcId" : { "Ref" : "myVPC" },
+            "AvailabilityZone" : "us-east-1b",
+            "CidrBlock" : "10.0.2.0/24",
+            "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet2" } ]
+          }
+        },
 
     "privateRouteTable":
         {

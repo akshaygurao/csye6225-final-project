@@ -65,7 +65,7 @@
                 ],
                 "Resource":
                 [
-                  "*"
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-subramanianroh:application:testapp"
                 ]
               },
               {
@@ -110,6 +110,7 @@
         "Properties" :
         {
           "ApplicationName" : {"Ref" : "myCodeDeployApp"},
+            "DeploymentGroupName":"csye6225group",
           "Ec2TagFilters":
           [
             {
@@ -127,7 +128,7 @@
       "Type": "AWS::IAM::Role",
       "Properties":
       {
-        "RoleName":"CodeDeployEC2Service",
+        "RoleName":"CodeDeployEC2ServiceRole",
         "AssumeRolePolicyDocument":
         {
 

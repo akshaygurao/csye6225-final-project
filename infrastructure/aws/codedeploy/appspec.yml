@@ -15,26 +15,26 @@ files:
   - source: ./validateService.sh
     destination: /home/ubuntu
   - source: ./build/libs/ROOT.war
-    destination: /var/lib/tomcat7/webapps
+    destination: /var/lib/tomcat8/webapps
 
 hooks:
   ApplicationStop:
-   - location: ./applicationStop.sh
-     timeout: 180
+   - location: ./home/ubuntu/applicationStop.sh
+     timeout: 600
      runas: ubuntu
   BeforeInstall:
-   - location: ./beforeInstall.sh
-     timeout: 180
+   - location: ./home/ubuntu/beforeInstall.sh
+     timeout: 600
      runas: ubuntu
   AfterInstall:
-   - location: ./afterInstall.sh
-     timeout: 180
+   - location: ./home/ubuntu/afterInstall.sh
+     timeout: 600
      runas: ubuntu
   ApplicationStart:
-   - location: ./applicationStart.sh
-     timeout: 180
+   - location: ./home/ubuntu/applicationStart.sh
+     timeout: 600
      runas: ubuntu
   ValidateService:
-   - location: ./validateService.sh
+   - location: ./home/ubuntu/validateService.sh
      timeout: 180
      runas: ubuntu
