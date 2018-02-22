@@ -63,6 +63,6 @@ deploy:
     application: $application
     deployment_group: $deployment_group
     wait-until-deployed: true
-    after_deploy: "echo 'done!'"
+    after_deploy: "echo 'done deploying!'"
     on:
       branch: assignment_6
