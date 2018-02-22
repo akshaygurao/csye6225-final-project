@@ -1,2 +1,3 @@
 #!/bin/bash
-sudo service tomcat7 start
+
+sudo service tomcat8 start

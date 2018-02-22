@@ -92,7 +92,7 @@
         "DisableApiTermination" : true,
         "BlockDeviceMappings" : [
                {
-                  "DeviceName" : "/dev/sdm",
+                  "DeviceName" : "/dev/sda1",
                   "Ebs" : {
                      "VolumeType" : { "Ref" : "RootVolumeType"},
                      "VolumeSize" : "16"
