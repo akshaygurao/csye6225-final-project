@@ -110,7 +110,7 @@
         "Properties" :
         {
           "ApplicationName" : {"Ref" : "myCodeDeployApp"},
-          "DeploymentGroupName":"csye6225group",
+            "DeploymentGroupName":"csye6225group",
           "Ec2TagFilters":
           [
             {
@@ -128,7 +128,7 @@
       "Type": "AWS::IAM::Role",
       "Properties":
       {
-        "RoleName":"CodeDeployEC2Service",
+        "RoleName":"CodeDeployEC2ServiceRole",
         "AssumeRolePolicyDocument":
         {
 
