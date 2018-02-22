@@ -54,7 +54,7 @@
                 ],
                 "Resource":
                 [
-                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-subramanianroh:application:testapp"
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-guraoa:application:testapp"
                 ]
               },
               {
@@ -65,7 +65,7 @@
                 ],
                 "Resource":
                 [
-                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-subramanianroh:application:testapp"
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-guraoa:application:testapp"
                 ]
               },
               {
@@ -76,9 +76,9 @@
                 ],
                 "Resource":
                 [
-                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-subramanianroh:deploymentconfig:CodeDeployDefault.OneAtATime",
-                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-subramanianroh:deploymentconfig:CodeDeployDefault.HalfAtATime",
-                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-subramanianroh:deploymentconfig:CodeDeployDefault.AllAtOnce"
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-guraoa:deploymentconfig:CodeDeployDefault.OneAtATime",
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-guraoa:deploymentconfig:CodeDeployDefault.HalfAtATime",
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-guraoa:deploymentconfig:CodeDeployDefault.AllAtOnce"
                 ]
               }
             ]
