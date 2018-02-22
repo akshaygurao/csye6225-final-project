@@ -54,7 +54,11 @@
                 ],
                 "Resource":
                 [
+<<<<<<< HEAD
                   "arn:aws:codedeploy:us-east-1:csye6225-spring2018-venkatakrishnanv:application:testapp"
+=======
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-guraoa:application:testapp"
+>>>>>>> 01ecf4870eb7a293cb36abc79fe724fb8e9e90b5
                 ]
               },
               {
@@ -65,7 +69,11 @@
                 ],
                 "Resource":
                 [
+<<<<<<< HEAD
                   "arn:aws:codedeploy:us-east-1:csye6225-spring2018-venkatakrishnanv:application:testapp"
+=======
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-guraoa:application:testapp"
+>>>>>>> 01ecf4870eb7a293cb36abc79fe724fb8e9e90b5
                 ]
               },
               {
@@ -76,9 +84,15 @@
                 ],
                 "Resource":
                 [
+<<<<<<< HEAD
                   "arn:aws:codedeploy:us-east-1:csye6225-spring2018-venkatakrishnanv:deploymentconfig:CodeDeployDefault.OneAtATime",
                   "arn:aws:codedeploy:us-east-1:csye6225-spring2018-venkatakrishnanv:deploymentconfig:CodeDeployDefault.HalfAtATime",
                   "arn:aws:codedeploy:us-east-1:csye6225-spring2018-venkatakrishnanv:deploymentconfig:CodeDeployDefault.AllAtOnce"
+=======
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-guraoa:deploymentconfig:CodeDeployDefault.OneAtATime",
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-guraoa:deploymentconfig:CodeDeployDefault.HalfAtATime",
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-guraoa:deploymentconfig:CodeDeployDefault.AllAtOnce"
+>>>>>>> 01ecf4870eb7a293cb36abc79fe724fb8e9e90b5
                 ]
               }
             ]
