@@ -65,7 +65,7 @@
                 ],
                 "Resource":
                 [
-                  "*"
+                  "arn:aws:codedeploy:us-east-1:csye6225-spring2018-subramanianroh:application:testapp"
                 ]
               },
               {
