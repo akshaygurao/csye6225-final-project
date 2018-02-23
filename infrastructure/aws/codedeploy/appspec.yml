@@ -7,22 +7,22 @@ files:
 
 hooks:
   ApplicationStop:
-   - location: ./applicationStop.sh
+   - location:  ./afterInstall.sh
      timeout: 600
      runas: ubuntu
   BeforeInstall:
-   - location: ./beforeInstall.sh
-     timeout: 600
-     runas: ubuntu
-  AfterInstall:
-   - location: ./afterInstall.sh
-     timeout: 600
-     runas: ubuntu
-  ApplicationStart:
    - location: ./applicationStart.sh
      timeout: 600
      runas: ubuntu
-  ValidateService:
+  AfterInstall:
    - location: ./validateService.sh
+     timeout: 600
+     runas: ubuntu
+  ApplicationStart:
+   - location: ./applicationStop.sh
+     timeout: 600
+     runas: ubuntu
+  ValidateService:
+   - location: ./beforeInstall.sh
      timeout: 180
      runas: ubuntu
