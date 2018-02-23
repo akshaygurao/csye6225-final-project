@@ -186,7 +186,7 @@
         "Properties" :
         {
           "ApplicationName" : {"Ref" : "myCodeDeployApp"},
-            "DeploymentGroupName":"csye6225group",
+          "DeploymentGroupName":"csye6225group",
           "Ec2TagFilters":
           [
             {
