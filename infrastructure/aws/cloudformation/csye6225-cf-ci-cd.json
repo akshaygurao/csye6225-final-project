@@ -52,10 +52,9 @@
             [
               {
                  "Effect": "Allow",
-                 "Principal":
-                 {
-                    "Service": [ "codedeploy.amazonaws.com" ]
-                 },
+                 "Principal": {
+                "Service": [ "codedeploy.amazonaws.com" ]
+            },
                  "Action": [ "sts:AssumeRole" ]
               }
             ]
