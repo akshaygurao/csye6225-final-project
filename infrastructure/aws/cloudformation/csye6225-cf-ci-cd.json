@@ -127,8 +127,7 @@
                 ],
                 "Resource":
                 [
-                  {"Fn::Join" : [":",["arn:aws:codedeploy:us-east-1",{"Ref" : "AWS::AccountId"},"application:testapp"]]}
-                ]
+                  {"Fn::Join" : [":",["arn:aws:codedeploy:us-east-1",{"Ref" : "AWS::AccountId"},"application:testapp"]]}                ]
               },
               {
                 "Effect": "Allow",
