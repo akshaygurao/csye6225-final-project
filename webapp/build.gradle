@@ -61,6 +61,10 @@ dependencies {
 
     compile('com.h2database:h2:+')
 
+    // https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-catalina
+    compile group: 'org.apache.tomcat', name: 'tomcat-catalina', version: '8.5.28'
+
+
 
     // https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity4
     compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity4', version: '2.1.2.RELEASE'
@@ -116,6 +120,8 @@ dependencies {
 war {
     archiveName = 'ROOT.war'
 }
+
+
 
 dependencyManagement {
     imports {
