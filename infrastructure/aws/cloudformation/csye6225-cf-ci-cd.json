@@ -187,6 +187,7 @@
         {
           "ApplicationName" : {"Ref" : "myCodeDeployApp"},
           "DeploymentGroupName":"csye6225group",
+          "DeploymentStyle" : {"DeploymentType": "IN_PLACE","DeploymentOption":"WITHOUT_TRAFFIC_CONTROL"},
           "Ec2TagFilters":
           [
             {
