@@ -6,23 +6,23 @@ files:
     destination: /var/lib/tomcat8/webapps
 
 hooks:
-  ApplicationStop:
-   - location:  ./afterInstall.sh
-     timeout: 180
-     runas: ubuntu
-  BeforeInstall:
-   - location: ./applicationStart.sh
-     timeout: 180
-     runas: ubuntu
   AfterInstall:
-   - location: ./validateService.sh
+   - location: ./afterInstall.sh
      timeout: 180
      runas: ubuntu
   ApplicationStart:
-   - location: ./applicationStop.sh
+   - location: ./applicationStart.sh
      timeout: 180
      runas: ubuntu
   ValidateService:
+   - location: ./validateService.sh
+     timeout: 180
+     runas: ubuntu
+  ApplicationStop:
+   - location: ./applicationStop.sh
+     timeout: 180
+     runas: ubuntu
+  BeforeInstall:
    - location: ./beforeInstall.sh
      timeout: 180
      runas: ubuntu
