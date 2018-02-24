@@ -18,7 +18,6 @@
       "Type": "AWS::IAM::Role",
       "Properties":
       {
-        "Path":"/",
         "RoleName":"CodeDeployEC2ServiceRole",
         "AssumeRolePolicyDocument":
         {
@@ -30,7 +29,7 @@
                  "Effect": "Allow",
                  "Principal":
                  {
-                    "Service": [ "codedeploy.amazonaws.com" ]
+                    "Service": [ "ec2.amazonaws.com" ]
                  },
                  "Action": [ "sts:AssumeRole" ]
               }
@@ -44,7 +43,6 @@
       "Type": "AWS::IAM::Role",
       "Properties":
       {
-        "Path":"/",
         "RoleName":"CodeDeployServiceRole",
         "AssumeRolePolicyDocument":
         {
@@ -71,9 +69,9 @@
     "myCodeDeployEC2S3Policy":
     {
       "Type":"AWS::IAM::ManagedPolicy",
+      "DependsOn":"myEC2Role",
       "Properties":
       {
-        "Path":"/",
         "ManagedPolicyName" : "CodeDeploy-EC2-S3",
         "PolicyDocument":
         {
@@ -88,7 +86,7 @@
             "Resource": {"Ref":"arn"}
         }
     ]
-},
+    },
         "Roles":["CodeDeployEC2ServiceRole"]
       }
     },
@@ -97,7 +95,6 @@
         "Type":"AWS::IAM::ManagedPolicy",
         "Properties":
         {
-          "Path":"/",
           "ManagedPolicyName" : "Travis-Upload-To-S3",
           "PolicyDocument":
           {
@@ -120,7 +117,6 @@
         "Type":"AWS::IAM::ManagedPolicy",
         "Properties":
         {
-          "Path":"/",
           "ManagedPolicyName" : "Travis-Code-Deploy",
           "PolicyDocument":
           {
