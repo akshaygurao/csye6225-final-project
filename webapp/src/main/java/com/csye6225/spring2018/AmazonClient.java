@@ -1,5 +1,7 @@
 package com.csye6225.spring2018;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
@@ -42,30 +44,8 @@ public class AmazonClient {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
         this.s3client = new AmazonS3Client(credentials);
     }
-
-    @PostConstruct
-    private void initializingAmazon(){
-        AWSCredentials credentials = new EC2ContainerCredentialsProviderWrapper().getCredentials();
-        this.s3client = new AmazonS3Client(credentials);
-    }
 */
-
-    AWSSecurityTokenServiceClient stsClient = new AWSSecurityTokenServiceClient(new ProfileCredentialsProvider());
-
-    GetSessionTokenRequest getSessionTokenRequest = new GetSessionTokenRequest();
-
-    GetSessionTokenResult sessionTokenResult = stsClient.getSessionToken(getSessionTokenRequest);
-    Credentials sessionCredentials = sessionTokenResult.getCredentials();
-//    System.out.println("Session Credentials: " + sessionCredentials.toString());
-
-
-    // Package the session credentials as a BasicSessionCredentials
-    // object for an S3 client object to use.
-    BasicSessionCredentials basicSessionCredentials =
-            new BasicSessionCredentials(sessionCredentials.getAccessKeyId(),
-                    sessionCredentials.getSecretAccessKey(),
-                    sessionCredentials.getSessionToken());
-    AmazonS3Client s3client = new AmazonS3Client(basicSessionCredentials);
+    AmazonS3 s3client = new AmazonS3Client(new ProfileCredentialsProvider());
 
     public String uploadFile(MultipartFile multipartFile) {
 
@@ -95,8 +75,28 @@ public class AmazonClient {
     }
 
     private void uploadFileTos3bucket(String fileName, File file) {
-        s3client.putObject(new PutObjectRequest(bucketName, fileName, file)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
+        try {
+            s3client.putObject(new PutObjectRequest(bucketName, fileName, file)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+        }  catch (AmazonServiceException ase) {
+            System.out.println("Caught an AmazonServiceException, which " +
+                    "means your request made it " +
+                    "to Amazon S3, but was rejected with an error response" +
+                    " for some reason.");
+            System.out.println("Error Message:    " + ase.getMessage());
+            System.out.println("HTTP Status Code: " + ase.getStatusCode());
+            System.out.println("AWS Error Code:   " + ase.getErrorCode());
+            System.out.println("Error Type:       " + ase.getErrorType());
+            System.out.println("Request ID:       " + ase.getRequestId());
+        } catch (AmazonClientException ace) {
+            System.out.println("Caught an AmazonClientException, which " +
+                    "means the client encountered " +
+                    "an internal error while trying to " +
+                    "communicate with S3, " +
+                    "such as not being able to access the network.");
+            System.out.println("Error Message: " + ace.getMessage());
+        }
+
     }
 
     public String deleteFileFromS3Bucket(String fileUrl) {
