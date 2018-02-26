@@ -1,14 +1,12 @@
 package com.csye6225.spring2018;
 
 import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.sns.AmazonSNSClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +39,7 @@ public class AmazonClient {
     @PostConstruct
     private void initializingAmazon(){
         AWSCredentials credentials = new DefaultAWSCredentialsProviderChain().getCredentials();
+        this.s3client = new AmazonS3Client(credentials);
     }
 
     public String uploadFile(MultipartFile multipartFile) {
