@@ -2,10 +2,7 @@ package com.csye6225.spring2018;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicSessionCredentials;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper;
+import com.amazonaws.auth.*;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -45,7 +42,8 @@ public class AmazonClient {
         this.s3client = new AmazonS3Client(credentials);
     }
 */
-    AmazonS3 s3client = new AmazonS3Client(new ProfileCredentialsProvider());
+//    AmazonS3 s3client = new AmazonS3Client(new ProfileCredentialsProvider());
+    AmazonS3 s3client = AmazonS3ClientBuilder.standard().withCredentials(new InstanceProfileCredentialsProvider(false)).build();
 
     public String uploadFile(MultipartFile multipartFile) {
 
