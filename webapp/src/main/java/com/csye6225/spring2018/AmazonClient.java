@@ -30,7 +30,7 @@ public class AmazonClient {
 
 //    private AmazonS3 s3client;
 
-    private AmazonS3 s3client = new AmazonS3Client(new ProfileCredentialsProvider());
+    private AmazonS3 s3client = AmazonS3ClientBuilder.defaultClient();
     @Value("${endpointUrl}")
     private String endpointUrl;
     @Value("${bucketName}")
