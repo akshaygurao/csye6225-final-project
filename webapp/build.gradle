@@ -115,6 +115,8 @@ dependencies {
     // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
     compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.285'
 
+    compile 'com.amazonaws:aws-java-sdk-iam:1.11.285'
+    compile 'com.amazonaws:aws-java-sdk-ec2:1.11.285'
 
 }
 
