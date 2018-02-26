@@ -124,5 +124,13 @@ war {
     archiveName = 'ROOT.war'
 }
 
-
+repositories {
+    jcenter()
+    maven {
+        url "s3://s3.csye6225-spring2018-guraoa.me.s3.amazonaws.com"
+        authentication {
+            awsIm(AwsImAuthentication)
+        }
+    }
+}
 
