@@ -1,7 +1,5 @@
 package com.csye6225.spring2018;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,11 +19,7 @@ import java.util.Date;
 @Service
 public class AmazonClient {
 
-    AmazonS3 s3client =
-            AmazonS3ClientBuilder.standard()
-                    .withRegion("us-east-1") // The first region to try your request against
-                    .withForceGlobalBucketAccessEnabled(true) // If a bucket is in a different region, try again in the correct region
-                    .build();
+    AmazonS3 s3client = new AmazonS3Client(new DefaultAWSCredentialsProviderChain());
 
     @Value("${endpointUrl}")
     private String endpointUrl;
