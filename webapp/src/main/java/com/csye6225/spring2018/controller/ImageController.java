@@ -1,5 +1,7 @@
 package com.csye6225.spring2018.controller;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.csye6225.spring2018.AmazonClient;
 import com.csye6225.spring2018.User;
 import com.csye6225.spring2018.UserRepository;
@@ -25,6 +27,7 @@ public class ImageController {
 
     private final static Logger logger = LoggerFactory.getLogger(IndexController.class);
 
+    AmazonS3 s3Client = AmazonS3ClientBuilder.defaultClient();
     private AmazonClient amazonClient;
 
     @Autowired

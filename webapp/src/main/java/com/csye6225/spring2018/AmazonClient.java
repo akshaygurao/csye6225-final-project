@@ -1,9 +1,11 @@
 package com.csye6225.spring2018;
 
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -20,27 +22,27 @@ import java.util.Date;
 @Service
 public class AmazonClient {
 
-    private AmazonS3 s3client;
+    AmazonS3 s3client = AmazonS3ClientBuilder.defaultClient();
 
     @Value("${endpointUrl}")
     private String endpointUrl;
     @Value("${bucketName}")
     private String bucketName;
-    @Value("${accessKey}")
+    /*@Value("${accessKey}")
     private String accessKey;
     @Value("${secretKey}")
     private String secretKey;
-    /*@PostConstruct
+    @PostConstruct
     private void initializeAmazon() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
         this.s3client = new AmazonS3Client(credentials);
-    }*/
+    }
 
     @PostConstruct
     private void initializingAmazon(){
         AWSCredentials credentials = new DefaultAWSCredentialsProviderChain().getCredentials();
         this.s3client = new AmazonS3Client(credentials);
-    }
+    }*/
 
     public String uploadFile(MultipartFile multipartFile) {
 
