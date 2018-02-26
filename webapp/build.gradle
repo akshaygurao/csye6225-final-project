@@ -19,7 +19,6 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 apply plugin: 'idea'
-apply plugin: 'groovy'
 apply plugin: "io.spring.dependency-management"
 
 version = '0.0.1-SNAPSHOT'
@@ -64,8 +63,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-catalina
     compile group: 'org.apache.tomcat', name: 'tomcat-catalina', version: '8.5.28'
 
-
-
     // https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity4
     compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity4', version: '2.1.2.RELEASE'
     // https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils
@@ -102,12 +99,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
-
-    testCompile(
-            'junit:junit:4.12',
-            'org.codehaus.groovy:groovy-all:2.4.11',
-            'org.spockframework:spock-core:1.1-groovy-2.4'
-    )
 
     // https://mvnrepository.com/artifact/commons-io/commons-io
     compile group: 'commons-io', name: 'commons-io', version: '2.4'

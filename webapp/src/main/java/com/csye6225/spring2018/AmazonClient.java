@@ -43,7 +43,9 @@ public class AmazonClient {
     }
 */
 //    AmazonS3 s3client = new AmazonS3Client(new ProfileCredentialsProvider());
-    AmazonS3 s3client = AmazonS3ClientBuilder.standard().withCredentials(new InstanceProfileCredentialsProvider(false)).build();
+//    AmazonS3 s3client = AmazonS3ClientBuilder.standard().withCredentials(new InstanceProfileCredentialsProvider(false)).build();
+
+    private AmazonS3 s3client = AmazonS3ClientBuilder.defaultClient();
 
     public String uploadFile(MultipartFile multipartFile) {
 
