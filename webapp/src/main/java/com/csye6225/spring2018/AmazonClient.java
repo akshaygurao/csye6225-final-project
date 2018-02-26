@@ -22,7 +22,11 @@ import java.util.Date;
 @Service
 public class AmazonClient {
 
-    AmazonS3 s3client = AmazonS3ClientBuilder.defaultClient();
+    AmazonS3 s3client =
+            AmazonS3ClientBuilder.standard()
+                    .withRegion("us-east-1") // The first region to try your request against
+                    .withForceGlobalBucketAccessEnabled(true) // If a bucket is in a different region, try again in the correct region
+                    .build();
 
     @Value("${endpointUrl}")
     private String endpointUrl;
