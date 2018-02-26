@@ -11,6 +11,7 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,8 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Value("${image.default.link}")
+    private String defaultLocation;
 
     @PostMapping(value="/loginUser", consumes = "application/json", produces = "application/json")
     @ResponseBody
@@ -66,7 +69,7 @@ public class UserController {
         newUser.setFirstname(String.valueOf(map.get("firstname")));
         newUser.setLastname(String.valueOf(map.get("lastname")));
         newUser.setAbout(String.valueOf(map.get("about")));
-        String destination = "/home/temp/google.png";
+        String destination = defaultLocation;
         newUser.setPhoto_location(destination);
         newUser.setEmail(String.valueOf(map.get("email")));
         newUser.setPassword(BCrypt.hashpw(String.valueOf(map.get("password")),BCrypt.gensalt()));

@@ -88,8 +88,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.mindrot/jbcrypt
     compile group: 'org.mindrot', name: 'jbcrypt', version: '0.3m'
 
-    // https://mvnrepository.com/artifact/org.json/json
-    compile group: 'org.json', name: 'json', version: '20090211'
 
     // https://mvnrepository.com/artifact/junit/junit
     testCompile group: 'junit', name: 'junit', version: '4.12'
@@ -105,23 +103,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
     compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.285'
-
-    compile 'com.amazonaws:aws-java-sdk-iam:1.11.285'
-    compile 'com.amazonaws:aws-java-sdk-ec2:1.11.285'
-
 }
 
 war {
     archiveName = 'ROOT.war'
 }
-
-repositories {
-    jcenter()
-    maven {
-        url "s3://s3.csye6225-spring2018-guraoa.me.s3.amazonaws.com"
-        authentication {
-            awsIm(AwsImAuthentication)
-        }
-    }
-}
-

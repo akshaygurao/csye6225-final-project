@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,6 +37,8 @@ public class ImageController {
     private String endpointUrl;
     @Value("${bucketName}")
     private String bucketName;
+    @Value("${image.default.link}")
+    private String defaultLocation;
 
     @Autowired
     Environment env;
@@ -55,7 +56,7 @@ public class ImageController {
             for (User u : userRepository.findAll()) {
                 if (u.getEmail().equals(session.getAttribute("email"))) {
                     if(env.getProperty("app.profile.path").equals("aws")) {
-                        if (!existPic.equals("/home/temp/google.png")) {
+                        if (!existPic.equals(defaultLocation)) {
                             deleteFileFromS3Bucket(existPic);
                         }
                         String fileUrl = uploadFileToS3Bucket(multipartFile);
@@ -67,7 +68,7 @@ public class ImageController {
                     else {
                         try {
                             File file = new File(existPic);
-                            if (!existPic.equalsIgnoreCase("/home/temp/google.png")) {
+                            if (!existPic.equals("/home/temp/google.png")) {
                                 if (file.exists()) {
                                     file.delete();
                                 }
@@ -96,7 +97,7 @@ public class ImageController {
         }
         String email = String.valueOf(session.getAttribute("email"));
         String fileUrl = String.valueOf(session.getAttribute("fileUrl"));
-        String destination = "/home/temp/google.png";
+        String destination = defaultLocation;
         for (User u : userRepository.findAll()) {
             if (u.getEmail().equals(email)) {
                 if (env.getProperty("app.profile.path").equals("aws")) {
