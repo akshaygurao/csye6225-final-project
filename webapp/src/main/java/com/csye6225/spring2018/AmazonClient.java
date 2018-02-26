@@ -1,5 +1,6 @@
 package com.csye6225.spring2018;
 
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,7 +21,7 @@ import java.util.Date;
 @Service
 public class AmazonClient {
 
-    AmazonS3 s3client = new AmazonS3Client(new DefaultAWSCredentialsProviderChain());
+    AmazonS3 s3client;
 
     @Value("${endpointUrl}")
     private String endpointUrl;
@@ -34,12 +36,12 @@ public class AmazonClient {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
         this.s3client = new AmazonS3Client(credentials);
     }
-
+*/
     @PostConstruct
     private void initializingAmazon(){
         AWSCredentials credentials = new DefaultAWSCredentialsProviderChain().getCredentials();
         this.s3client = new AmazonS3Client(credentials);
-    }*/
+    }
 
     public String uploadFile(MultipartFile multipartFile) {
 
