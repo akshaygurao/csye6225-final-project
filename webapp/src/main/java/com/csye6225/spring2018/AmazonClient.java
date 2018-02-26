@@ -29,7 +29,7 @@ import java.util.Date;
 public class AmazonClient {
 
     private AmazonS3 s3client;
-    
+
     @Value("${endpointUrl}")
     private String endpointUrl;
     @Value("${bucketName}")
