@@ -1,6 +1,5 @@
 package com.csye6225.spring2018.controller;
 
-import com.csye6225.spring2018.AmazonClient;
 import com.csye6225.spring2018.User;
 import com.csye6225.spring2018.UserRepository;
 import org.slf4j.Logger;
@@ -24,13 +23,6 @@ public class IndexController {
   private UserRepository userRepository;
 
   private final static Logger logger = LoggerFactory.getLogger(IndexController.class);
-
-  private AmazonClient amazonClient;
-
-  @Autowired
-  IndexController(AmazonClient amazonClient) {
-    this.amazonClient = amazonClient;
-  }
 
 
   @GetMapping("/")
