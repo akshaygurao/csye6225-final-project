@@ -51,7 +51,7 @@ public class ImageController {
             for (User u : userRepository.findAll()) {
                 if (u.getEmail().equals(session.getAttribute("email"))) {
                     if(env.getProperty("app.profile.path").equals("aws")) {
-                        if (existPic != null) {
+                        if (!existPic.equals("/home/temp/google.png")) {
                             this.amazonClient.deleteFileFromS3Bucket(existPic);
                         }
                         String fileUrl = this.amazonClient.uploadFile(multipartFile);
