@@ -2,12 +2,14 @@ package com.csye6225.spring2018;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +41,7 @@ public class AmazonClient {
 */
     @PostConstruct
     private void initializingAmazon(){
-        AWSCredentials credentials = new DefaultAWSCredentialsProviderChain().getCredentials();
+        AWSCredentials credentials = new EC2ContainerCredentialsProviderWrapper().getCredentials();
         this.s3client = new AmazonS3Client(credentials);
     }
 
