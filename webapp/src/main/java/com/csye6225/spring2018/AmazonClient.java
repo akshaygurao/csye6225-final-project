@@ -28,11 +28,13 @@ import java.util.Date;
 @Service
 public class AmazonClient {
 
+    private AmazonS3 s3client;
+    
     @Value("${endpointUrl}")
     private String endpointUrl;
     @Value("${bucketName}")
     private String bucketName;
-    /*@Value("${accessKey}")
+    @Value("${accessKey}")
     private String accessKey;
     @Value("${secretKey}")
     private String secretKey;
@@ -41,11 +43,7 @@ public class AmazonClient {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
         this.s3client = new AmazonS3Client(credentials);
     }
-*/
-//    AmazonS3 s3client = new AmazonS3Client(new ProfileCredentialsProvider());
-//    AmazonS3 s3client = AmazonS3ClientBuilder.standard().withCredentials(new InstanceProfileCredentialsProvider(false)).build();
 
-    private AmazonS3 s3client = AmazonS3ClientBuilder.defaultClient();
 
     public String uploadFile(MultipartFile multipartFile) {
 
@@ -63,7 +61,7 @@ public class AmazonClient {
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convFile = new File(file.getOriginalFilename());
+        File convFile = new File("/home/ubuntu/" +file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(file.getBytes());
         fos.close();
