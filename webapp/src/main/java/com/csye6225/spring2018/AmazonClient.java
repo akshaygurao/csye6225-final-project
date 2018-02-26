@@ -28,8 +28,9 @@ import java.util.Date;
 @Service
 public class AmazonClient {
 
-    private AmazonS3 s3client;
+//    private AmazonS3 s3client;
 
+    private AmazonS3 s3client = new AmazonS3Client(new ProfileCredentialsProvider());
     @Value("${endpointUrl}")
     private String endpointUrl;
     @Value("${bucketName}")
@@ -39,10 +40,10 @@ public class AmazonClient {
     @Value("${secretKey}")
     private String secretKey;
     @PostConstruct
-    private void initializeAmazon() {
+    /*private void initializeAmazon() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
         this.s3client = new AmazonS3Client(credentials);
-    }
+    }*/
 
 
     public String uploadFile(MultipartFile multipartFile) {
