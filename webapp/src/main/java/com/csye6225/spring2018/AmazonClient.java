@@ -32,11 +32,11 @@ public class AmazonClient {
     private String accessKey;
     @Value("${secretKey}")
     private String secretKey;
-    @PostConstruct
+    /*@PostConstruct
     private void initializeAmazon() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
         this.s3client = new AmazonS3Client(credentials);
-    }
+    }*/
 
     @PostConstruct
     private void initializingAmazon(){
