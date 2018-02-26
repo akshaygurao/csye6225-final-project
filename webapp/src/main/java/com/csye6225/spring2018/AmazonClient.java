@@ -1,14 +1,20 @@
 package com.csye6225.spring2018;
 
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClient;
+import com.amazonaws.services.securitytoken.model.Credentials;
+import com.amazonaws.services.securitytoken.model.GetSessionTokenRequest;
+import com.amazonaws.services.securitytoken.model.GetSessionTokenResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,8 +29,6 @@ import java.util.Date;
 @Service
 public class AmazonClient {
 
-    AmazonS3 s3client;
-
     @Value("${endpointUrl}")
     private String endpointUrl;
     @Value("${bucketName}")
@@ -38,12 +42,30 @@ public class AmazonClient {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
         this.s3client = new AmazonS3Client(credentials);
     }
-*/
+
     @PostConstruct
     private void initializingAmazon(){
         AWSCredentials credentials = new EC2ContainerCredentialsProviderWrapper().getCredentials();
         this.s3client = new AmazonS3Client(credentials);
     }
+*/
+
+    AWSSecurityTokenServiceClient stsClient = new AWSSecurityTokenServiceClient(new ProfileCredentialsProvider());
+
+    GetSessionTokenRequest getSessionTokenRequest = new GetSessionTokenRequest();
+
+    GetSessionTokenResult sessionTokenResult = stsClient.getSessionToken(getSessionTokenRequest);
+    Credentials sessionCredentials = sessionTokenResult.getCredentials();
+//    System.out.println("Session Credentials: " + sessionCredentials.toString());
+
+
+    // Package the session credentials as a BasicSessionCredentials
+    // object for an S3 client object to use.
+    BasicSessionCredentials basicSessionCredentials =
+            new BasicSessionCredentials(sessionCredentials.getAccessKeyId(),
+                    sessionCredentials.getSecretAccessKey(),
+                    sessionCredentials.getSessionToken());
+    AmazonS3Client s3client = new AmazonS3Client(basicSessionCredentials);
 
     public String uploadFile(MultipartFile multipartFile) {
 
