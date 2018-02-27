@@ -78,8 +78,6 @@
 								"sudo ./install auto \n",
 								"sudo service codedeploy-agent start \n",
 								"sudo apt-get install tomcat8 -y \n",
-                "sudo mkdir /home/ubantu/temp/ \n",
-								"sudo chmod 777 /home/ubuntu/temp/ \n",
 								"sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=csye6225master -Dspring.datasource.password=csye6225password  -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 \n",
 								{
 									"Fn::Join": [
@@ -109,7 +107,9 @@
 									]
 								},
 
-								"sudo service tomcat8 restart \n"
+								"sudo service tomcat8 restart \n",
+                "mkdir /home/ubantu/temp/ \n",
+								"chmod 777 /home/ubuntu/temp/ \n"
 							]
 						]
 					}
