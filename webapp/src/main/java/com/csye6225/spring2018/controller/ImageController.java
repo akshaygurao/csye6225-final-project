@@ -170,7 +170,7 @@ public class ImageController {
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convFile = new File("/home/ubuntu/" +file.getOriginalFilename());
+        File convFile = new File("/home/ubuntu/temp/" +file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(file.getBytes());
         fos.close();
