@@ -38,7 +38,7 @@ public class ImageController {
     private String endpointUrl;
     @Value("${bucketName}")
     private String bucket;
-    String bucketName = StringUtils.substringBeforeLast(bucket, ".s3.amazonaws.com");
+    String bucketName = bucket.substring(0, bucket.length() - ".s3.amazonaws.com".length());
     @Value("${image.default.link}")
     private String defaultLocation;
 
