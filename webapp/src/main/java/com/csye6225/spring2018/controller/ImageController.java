@@ -37,8 +37,8 @@ public class ImageController {
     @Value("${endpointUrl}")
     private String endpointUrl;
     @Value("${bucketName}")
-    private String bucket;
-    String bucketName = bucket.substring(0, bucket.length() - ".s3.amazonaws.com".length());
+    private String bucketName;
+    String bucket = bucketName.substring(0, bucketName.length() - ".s3.amazonaws.com".length());
     @Value("${image.default.link}")
     private String defaultLocation;
 
@@ -129,7 +129,7 @@ public class ImageController {
         try {
             AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
             String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-            s3.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+            s3.deleteObject(new DeleteObjectRequest(bucket, fileName));
             return "Successfully deleted";
         }catch (AmazonServiceException ase) {
             System.out.println("Caught an AmazonServiceException, which means your request made it to Amazon S3, but was rejected with an error response for some reason.");
@@ -151,8 +151,8 @@ public class ImageController {
             String fileUrl = "";
             File file = convertMultiPartToFile(multipartFile);
             String fileName = generateFileName(multipartFile);
-            fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
-            s3.putObject(new PutObjectRequest(bucketName, fileName, file).withCannedAcl(CannedAccessControlList.PublicRead));
+            fileUrl = endpointUrl + "/" + bucket + "/" + fileName;
+            s3.putObject(new PutObjectRequest(bucket, fileName, file).withCannedAcl(CannedAccessControlList.PublicRead));
             file.delete();
             return fileUrl;
         }catch (AmazonServiceException ase) {

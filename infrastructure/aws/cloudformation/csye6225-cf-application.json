@@ -108,8 +108,8 @@
 								},
 
 								"sudo service tomcat8 restart \n",
-                "mkdir /home/ubantu/temp/ \n",
-								"chmod 777 /home/ubuntu/temp/ \n"
+                "sudo mkdir /home/ubantu/temp/ \n",
+								"sudo chmod 777 /home/ubuntu/temp/ \n"
 							]
 						]
 					}
