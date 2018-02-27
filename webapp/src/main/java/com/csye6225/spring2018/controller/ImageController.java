@@ -52,14 +52,16 @@ public class ImageController {
         }
         String existPic = String.valueOf(session.getAttribute("fileUrl"));
         logger.info("Attempting to save file by using post method");
-
             for (User u : userRepository.findAll()) {
                 if (u.getEmail().equals(session.getAttribute("email"))) {
                     if(env.getProperty("app.profile.path").equals("aws")) {
                         if (!existPic.equals(defaultLocation)) {
+                            logger.info("Deleting existing image");
                             deleteFileFromS3Bucket(existPic);
                         }
+                        logger.info("Uploading to S3");
                         String fileUrl = uploadFileToS3Bucket(multipartFile);
+                        logger.info("Upload method complete");
                         u.setPhoto_location(fileUrl);
                         session.setAttribute("fileUrl", fileUrl);
                         session.setAttribute("uploadMessage", "You successfully uploaded '" + multipartFile.getOriginalFilename() + "'");
