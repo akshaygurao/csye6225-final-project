@@ -30,4 +30,4 @@ nbdist/
 .nb-gradle/
 
 ### Configs ###
-infrastructure/aws/cloudformation/.parameters.json
+infrastructure/aws/cloudformation/parameters-*
