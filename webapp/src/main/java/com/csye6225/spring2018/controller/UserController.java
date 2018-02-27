@@ -6,14 +6,12 @@ import com.csye6225.spring2018.User;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
-import org.apache.http.HttpResponse;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +29,10 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Value("${image.default.link}")
+    private String defaultLocation;
 
-    @RequestMapping(value="/loginUser", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+    @PostMapping(value="/loginUser", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public String login(@RequestBody String js, HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException {
         JSONParser parser = new JSONParser();
@@ -51,7 +51,7 @@ public class UserController {
         return new JsonObject().toString();
     }
 
-    @RequestMapping(value = "/registerUser", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+    @PostMapping(value = "/registerUser", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public String createUser(@RequestBody String json, HttpServletResponse response) throws ParseException, IOException {
         JSONParser parser = new JSONParser();
@@ -69,8 +69,8 @@ public class UserController {
         newUser.setFirstname(String.valueOf(map.get("firstname")));
         newUser.setLastname(String.valueOf(map.get("lastname")));
         newUser.setAbout(String.valueOf(map.get("about")));
-        String destination = "/home/temp/google.png";
-            newUser.setPhoto_location(destination);
+        String destination = defaultLocation;
+        newUser.setPhoto_location(destination);
         newUser.setEmail(String.valueOf(map.get("email")));
         newUser.setPassword(BCrypt.hashpw(String.valueOf(map.get("password")),BCrypt.gensalt()));
         userRepository.save(newUser);
@@ -78,7 +78,7 @@ public class UserController {
         return js.toString();
     }
 
-    @RequestMapping(value = "/search", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+    @PostMapping(value = "/search", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public String searchUser(@RequestBody String json) throws ParseException {
         JSONParser parser = new JSONParser();
