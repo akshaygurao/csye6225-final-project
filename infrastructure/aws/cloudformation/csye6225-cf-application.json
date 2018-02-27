@@ -54,6 +54,7 @@
   "Resources" : {
     "EC2Instance" : {
       "Type" : "AWS::EC2::Instance",
+      "DependsOn":"myRDSInstance",
       "Properties" : {
         "AvailabilityZone" : "us-east-1c",
         "InstanceType" : { "Ref" : "InstanceType" },
@@ -78,11 +79,37 @@
                 "sudo ./install auto \n",
                 "sudo service codedeploy-agent start \n",
                 "sudo apt-get install tomcat8 -y \n",
-                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 \n",
-                "sudo service tomcat8 restart \n",
-                "sudo apt-get install mysql-server \n",
-                "sudo service mysql restart \n",
-                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.url=jdbc:mysql://$RDS_HOSTNAME/csye6225\\\"\" >> /etc/default/tomcat8 \n"
+                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=csye6225master -Dspring.datasource.password=csye6225password  -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 ",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "echo 'JAVA_OPTS=\"${JAVA_OPTS} -Dspring.datasource.url=\\\"jdbc:mysql://",
+                                            {
+                                                "Fn::GetAtt": [
+                                                    "myRDSInstance",
+                                                    "Endpoint.Address"
+                                                ]
+                                            },
+                                            ":3306/csye6225\\\"\"' >> /etc/default/tomcat8"
+                                        ]
+                                    ]
+                                },
+                                                {
+                                                    "Fn::Join": [
+                                                        "",
+                                                        [
+                                                            "echo 'JAVA_OPTS=\"${JAVA_OPTS} -DbucketName=\\\"",
+                                                            {
+                                                                "Fn::GetAtt": [
+                                                                    "myS3Bucket", "Arn"
+                                                                ]
+                                                            },
+                                                            "\\\"\"' >> /etc/default/tomcat8"
+                                                        ]
+                                                    ]
+                                                },
+                "sudo service tomcat8 restart \n"
             ]
         ]
           }
