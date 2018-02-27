@@ -38,7 +38,6 @@ public class ImageController {
     private String endpointUrl;
     @Value("${bucketName}")
     private String bucketName;
-    String bucket = bucketName.substring(0, bucketName.length() - ".s3.amazonaws.com".length());
     @Value("${image.default.link}")
     private String defaultLocation;
 
@@ -127,6 +126,7 @@ public class ImageController {
 
     private String deleteFileFromS3Bucket(String fileUrl){
         try {
+            String bucket = bucketName.substring(0, bucketName.length() - ".s3.amazonaws.com".length());
             AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
             String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
             s3.deleteObject(new DeleteObjectRequest(bucket, fileName));
@@ -147,6 +147,7 @@ public class ImageController {
 
     private String uploadFileToS3Bucket(MultipartFile multipartFile){
         try{
+            String bucket = bucketName.substring(0, bucketName.length() - ".s3.amazonaws.com".length());
             AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
             String fileUrl = "";
             File file = convertMultiPartToFile(multipartFile);
