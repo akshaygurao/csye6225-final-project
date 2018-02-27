@@ -1,26 +1,16 @@
 package com.csye6225.spring2018.controller;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.util.IOUtils;
-import com.csye6225.spring2018.AmazonClient;
 import com.csye6225.spring2018.User;
 import com.csye6225.spring2018.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.*;
@@ -34,59 +24,39 @@ public class IndexController {
 
   private final static Logger logger = LoggerFactory.getLogger(IndexController.class);
 
-  private AmazonClient amazonClient;
 
-  @Autowired
-  IndexController(AmazonClient amazonClient) {
-    this.amazonClient = amazonClient;
-  }
-
-
-  @RequestMapping(value = "/", method = RequestMethod.GET)
+  @GetMapping("/")
   public String index() {
     logger.info("Loading home page.");
     return "index";
   }
 
-  @RequestMapping(value = "/register", method = RequestMethod.GET)
+  @GetMapping("/register")
   public String getRegister() {
     logger.info("Loading registration page.");
     return "register";
   }
 
-  @RequestMapping(value = "/register", method = RequestMethod.POST)
-  public String registerUser() {
-    logger.info("Loading registration page.");
-    return "register";
-  }
-
-  @RequestMapping(value = "/login", method = RequestMethod.GET)
+  @GetMapping("/login")
   public String login() {
     logger.info("Loading login page.");
     return "login";
   }
 
-  @RequestMapping(value = "/login", method = RequestMethod.POST)
-  public String postLogin() {
-    logger.info("Loading login after registration.");
+  @PostMapping("/login")
+  public String loginPost(){
+    logger.info("Logging in after successful authentication");
     return "login";
   }
 
-  @RequestMapping(value = "/logout", method = RequestMethod.GET)
+  @GetMapping("/logout")
   public String logoutPage(HttpServletRequest request){
     logger.info("Loading index page after logging out.");
     request.getSession().invalidate();
     return "index";
   }
 
-  @RequestMapping(value = "/logout", method = RequestMethod.POST)
-  public String postLogoutPage(HttpServletRequest request){
-    logger.info("Loading index page after logging out.");
-    request.getSession().invalidate();
-    return "index";
-  }
-
-  @RequestMapping(value = "/loginSuccess", method = RequestMethod.POST)
+  @PostMapping("/loginSuccess")
   public String userSucceess(HttpServletRequest request, @RequestParam String email, @RequestParam String password){
     for (User u : userRepository.findAll()) {
       if (u.getEmail().equals(email) && BCrypt.checkpw(password, u.getPassword())) {
@@ -94,7 +64,7 @@ public class IndexController {
         HttpSession session = request.getSession(true);
         session.setAttribute("firstname", u.getFirstname());
         session.setAttribute("lastname", u.getLastname());
-        session.setAttribute("photo_location",u.getPhoto_location());
+        session.setAttribute("fileUrl",u.getPhoto_location());
         session.setAttribute("about",u.getAbout());
         session.setAttribute("email",u.getEmail());
         return "UserHome";
@@ -104,10 +74,10 @@ public class IndexController {
     return "login";
   }
 
-  @RequestMapping(value = "/loginSuccess", method = RequestMethod.GET)
+  @GetMapping("/loginSuccess")
   public String userSuccessGet(HttpServletRequest request){
     HttpSession session = request.getSession(false);
-    if (session == null || session.getAttribute("photo_location") == null){
+    if (session == null || session.getAttribute("fileUrl") == null){
       logger.info("Redirecting to login as no session found");
       return "login";
     }
@@ -115,7 +85,7 @@ public class IndexController {
     return "UserHome";
   }
 
-  @RequestMapping(value = "/searchResults", method = RequestMethod.POST)
+  @PostMapping("/searchResults")
   public String searchResults(HttpServletRequest request, @RequestParam String search){
       ArrayList<String> searchResults = new ArrayList<>();
       for (User u : userRepository.findAll()){
@@ -128,7 +98,7 @@ public class IndexController {
       return "index";
   }
 
-  @RequestMapping(value = "/profile", method = RequestMethod.POST)
+  @PostMapping("/profile")
     public String viewProfile(HttpServletRequest request, @RequestParam String username){
       logger.info("Loading profile for selected user");
       String[] names = username.split("\\s+");
@@ -144,7 +114,7 @@ public class IndexController {
       return "error";
   }
 
-  @RequestMapping(value = "/userProfile", method = RequestMethod.GET)
+  @GetMapping("/userProfile")
   public String getProfile(HttpServletRequest request) {
 
     if (request.getSession() == null) {
@@ -156,7 +126,7 @@ public class IndexController {
     }
   }
 
-  @RequestMapping(value = "/editProfile", method = RequestMethod.GET)
+  @GetMapping("/editProfile")
   public String getEditProfile(HttpServletRequest request){
     HttpSession session = request.getSession(false);
     if (session==null){
@@ -165,11 +135,11 @@ public class IndexController {
     return "editProfile";
   }
 
-  @RequestMapping("/photo")
+  @GetMapping("/photo")
   public ResponseEntity<byte[]> getImage(HttpServletRequest request) throws IOException {
 
     HttpSession session = request.getSession(false);
-    String filename = String.valueOf(session.getAttribute("photo_location"));
+    String filename = String.valueOf(session.getAttribute("fileUrl"));
 
     InputStream inputImage = new FileInputStream(filename);
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
