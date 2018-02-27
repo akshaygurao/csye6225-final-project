@@ -54,6 +54,7 @@
   "Resources" : {
     "EC2Instance" : {
       "Type" : "AWS::EC2::Instance",
+      "DependsOn":"myRDSInstance",
       "Properties" : {
         "AvailabilityZone" : "us-east-1c",
         "InstanceType" : { "Ref" : "InstanceType" },
@@ -78,7 +79,25 @@
                 "sudo ./install auto \n",
                 "sudo service codedeploy-agent start \n",
                 "sudo apt-get install tomcat8 -y \n",
-                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 \n",
+                "sudo chmod 777 /home \n",
+                "sudo chmod 777 /home/ubuntu \n"
+                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=csye6225master -Dspring.datasource.password=csye6225password  -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 \n",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "echo 'JAVA_OPTS=\"${JAVA_OPTS} -Dspring.datasource.url=\\\"jdbc:mysql://",
+                                            {
+                                                "Fn::GetAtt": [
+                                                    "myRDSInstance",
+                                                    "Endpoint.Address"
+                                                ]
+                                            },
+                                            ":3306/csye6225\\\"\"' >> /etc/default/tomcat8 \n"
+                                        ]
+                                    ]
+                                },
+
                 "sudo service tomcat8 restart \n"
             ]
         ]
@@ -167,7 +186,7 @@
          "Type" : "AWS::RDS::DBSubnetGroup",
          "Properties" : {
            "DBSubnetGroupDescription" : "making a RDS subnet from my VPC",
-            "SubnetIds" : [{"Fn::ImportValue" :"dbsubnet1"}, {"Fn::ImportValue" :"websubnet"}]
+            "SubnetIds" : [{"Fn::ImportValue" :"dbsubnet1"}, {"Fn::ImportValue" :"dbsubnet2"}]
          }
       }
 
