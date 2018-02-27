@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.csye6225.spring2018.User;
 import com.csye6225.spring2018.UserRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,8 @@ public class ImageController {
     @Value("${endpointUrl}")
     private String endpointUrl;
     @Value("${bucketName}")
-    private String bucketName;
+    private String bucket;
+    String bucketName = StringUtils.substringBeforeLast(bucket, ".s3.amazonaws.com");
     @Value("${image.default.link}")
     private String defaultLocation;
 
