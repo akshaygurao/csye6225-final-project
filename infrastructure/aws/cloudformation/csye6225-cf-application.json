@@ -1,202 +1,234 @@
 {
-  "AWSTemplateFormatVersion" : "2010-09-09",
+	"AWSTemplateFormatVersion": "2010-09-09",
 
-  "Description" : "AWS CloudFormation Template.",
+	"Description": "AWS CloudFormation Template.",
 
-  "Parameters" :
-  {
-    "KeyName": {
-      "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instance",
-      "Type": "AWS::EC2::KeyPair::KeyName",
-      "Default": "KeyName",
-      "ConstraintDescription" : "must be the name of an existing EC2 KeyPair."
-    },
+	"Parameters": {
+		"KeyName": {
+			"Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+			"Type": "AWS::EC2::KeyPair::KeyName",
+			"Default": "KeyName",
+			"ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+		},
 
-    "InstanceType" : {
-      "Description" : "WebServer EC2 instance type",
-      "Type" : "String",
-      "Default" : "t2.micro",
-      "ConstraintDescription" : "must be a valid EC2 instance type."
-    },
+		"InstanceType": {
+			"Description": "WebServer EC2 instance type",
+			"Type": "String",
+			"Default": "t2.micro",
+			"ConstraintDescription": "must be a valid EC2 instance type."
+		},
 
-    "SSHLocation" : {
-      "Description" : "The IP address range that can be used to SSH to the EC2 instances",
-      "Type": "String",
-      "MinLength": "9",
-      "MaxLength": "18",
-      "Default": "0.0.0.0/0",
-      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
-      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
-   },
+		"SSHLocation": {
+			"Description": "The IP address range that can be used to SSH to the EC2 instances",
+			"Type": "String",
+			"MinLength": "9",
+			"MaxLength": "18",
+			"Default": "0.0.0.0/0",
+			"AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+			"ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+		},
 
-   "AMIName" : {
-     "Type": "String"
-   },
-   "domain" : {
-     "Type": "String"
-   },
-   "MasterUsername" : {
-     "NoEcho":"true",
-     "Type": "String"
-   },
-   "MasterUserPassword" : {
-     "NoEcho":"true",
-     "Type": "String"
-   },
+		"AMIName": {
+			"Type": "String"
+		},
+		"domain": {
+			"Type": "String"
+		},
+		"MasterUsername": {
+			"NoEcho": "true",
+			"Type": "String"
+		},
+		"MasterUserPassword": {
+			"NoEcho": "true",
+			"Type": "String"
+		},
 
 
-   "RootVolumeType" : {
-     "Type": "String"
-   }
+		"RootVolumeType": {
+			"Type": "String"
+		}
 
-  },
+	},
 
-  "Resources" : {
-    "EC2Instance" : {
-      "Type" : "AWS::EC2::Instance",
-      "DependsOn":"myRDSInstance",
-      "Properties" : {
-        "AvailabilityZone" : "us-east-1c",
-        "InstanceType" : { "Ref" : "InstanceType" },
-        "SecurityGroupIds" : [ { "Fn::ImportValue" :"websg"} ],
-        "UserData":
-        {
-          "Fn::Base64":
-          {
-            "Fn::Join":
-            [
-            "",
-              [
-                "#!/bin/bash -xe \n",
-                "sudo apt-get update \n",
-                "sudo apt-get install openjdk-8-jdk -y\n",
-                "sudo apt-get install ruby -y \n",
-                "sudo apt-get install wget -y \n",
-                "sudo apt-get install python -y \n",
-                "sudo apt-get update \n",
-                "sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
-                "sudo chmod +x ./install \n",
-                "sudo ./install auto \n",
-                "sudo service codedeploy-agent start \n",
-                "sudo apt-get install tomcat8 -y \n",
-                "sudo chmod 777 /home \n",
-                "sudo chmod 777 /home/ubuntu \n"
-                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=csye6225master -Dspring.datasource.password=csye6225password  -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 \n",
-                                {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "echo 'JAVA_OPTS=\"${JAVA_OPTS} -Dspring.datasource.url=\\\"jdbc:mysql://",
-                                            {
-                                                "Fn::GetAtt": [
-                                                    "myRDSInstance",
-                                                    "Endpoint.Address"
-                                                ]
-                                            },
-                                            ":3306/csye6225\\\"\"' >> /etc/default/tomcat8 \n"
-                                        ]
-                                    ]
-                                },
+	"Resources": {
+		"EC2Instance": {
+			"Type": "AWS::EC2::Instance",
+			"DependsOn": "myRDSInstance",
+			"Properties": {
+				"AvailabilityZone": "us-east-1c",
+				"InstanceType": {
+					"Ref": "InstanceType"
+				},
+				"SecurityGroupIds": [{
+					"Fn::ImportValue": "websg"
+				}],
+				"UserData": {
+					"Fn::Base64": {
+						"Fn::Join": [
+							"", [
+								"#!/bin/bash -xe \n",
+								"sudo apt-get update \n",
+								"sudo apt-get install openjdk-8-jdk -y\n",
+								"sudo apt-get install ruby -y \n",
+								"sudo apt-get install wget -y \n",
+								"sudo apt-get install python -y \n",
+								"sudo apt-get update \n",
+								"sudo wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install \n",
+								"sudo chmod +x ./install \n",
+								"sudo ./install auto \n",
+								"sudo service codedeploy-agent start \n",
+								"sudo apt-get install tomcat8 -y \n",
+								"sudo chmod 777 /home \n",
+								"sudo chmod 777 /home/ubuntu \n",
+								"sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=csye6225master -Dspring.datasource.password=csye6225password  -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 \n",
+								{
+									"Fn::Join": [
+										"", [
+											"echo 'JAVA_OPTS=\"${JAVA_OPTS} -Dspring.datasource.url=\\\"jdbc:mysql://",
+											{
+												"Fn::GetAtt": [
+													"myRDSInstance",
+													"Endpoint.Address"
+												]
+											},
+											":3306/csye6225\\\"\"' >> /etc/default/tomcat8 \n"
+										]
+									]
+								},
+								{
+									"Fn::Join": [
+										"", [
+											"echo 'JAVA_OPTS=\"${JAVA_OPTS} -DbucketName=\\\"",
+											{
+												"Fn::GetAtt": [
+													"myS3Bucket", "DomainName"
+												]
+											},
+											"\\\"\"' >> /etc/default/tomcat8 \n"
+										]
+									]
+								},
 
-                "sudo service tomcat8 restart \n"
-            ]
-        ]
-          }
-      },
-        "SubnetId": {"Fn::ImportValue" : "websubnet" },
-        "KeyName" : { "Ref" : "KeyName" },
-        "ImageId" : { "Ref" : "AMIName"},
-        "IamInstanceProfile": {"Ref":"myInstanceProfile"},
-        "Tags" : [ { "Key" : "Name", "Value" : "myEC2Instance" } ],
-        "DisableApiTermination" : true,
-        "BlockDeviceMappings" : [
-               {
-                  "DeviceName" : "/dev/sda1",
-                  "Ebs" : {
-                     "VolumeType" : { "Ref" : "RootVolumeType"},
-                     "VolumeSize" : "16"
-                  }
-               }
-      ]
-    }
-    },
-    "myInstanceProfile":
-    {
-        "Type": "AWS::IAM::InstanceProfile",
-        "Properties": {
-        "Roles": [ { "Fn::ImportValue" : "ec2iamrole" }],
-        "InstanceProfileName": "myProfile"
-  }
-    },
-    "myDynamoDBTable" :
-    {
-      "Type" : "AWS::DynamoDB::Table",
-      "Properties" : {
-        "AttributeDefinitions" : [
-          {
-            "AttributeName" : "id",
-            "AttributeType" : "S"
-          }
-        ],
-        "KeySchema" : [
-          {
-            "AttributeName" : "id",
-            "KeyType" : "HASH"
-          }
-        ],
-        "TableName" : "csye6225",
-        "ProvisionedThroughput":
-        { "ReadCapacityUnits": 5,
-          "WriteCapacityUnits": 5
-        },
+								"sudo service tomcat8 restart \n"
+							]
+						]
+					}
+				},
+				"SubnetId": {
+					"Fn::ImportValue": "websubnet"
+				},
+				"KeyName": {
+					"Ref": "KeyName"
+				},
+				"ImageId": {
+					"Ref": "AMIName"
+				},
+				"IamInstanceProfile": {
+					"Ref": "myInstanceProfile"
+				},
+				"Tags": [{
+					"Key": "Name",
+					"Value": "myEC2Instance"
+				}],
+				"DisableApiTermination": true,
+				"BlockDeviceMappings": [{
+					"DeviceName": "/dev/sda1",
+					"Ebs": {
+						"VolumeType": {
+							"Ref": "RootVolumeType"
+						},
+						"VolumeSize": "16"
+					}
+				}]
+			}
+		},
+		"myInstanceProfile": {
+			"Type": "AWS::IAM::InstanceProfile",
+			"Properties": {
+				"Roles": [{
+					"Fn::ImportValue": "ec2iamrole"
+				}],
+				"InstanceProfileName": "myProfile"
+			}
+		},
+		"myDynamoDBTable": {
+			"Type": "AWS::DynamoDB::Table",
+			"Properties": {
+				"AttributeDefinitions": [{
+					"AttributeName": "id",
+					"AttributeType": "S"
+				}],
+				"KeySchema": [{
+					"AttributeName": "id",
+					"KeyType": "HASH"
+				}],
+				"TableName": "csye6225",
+				"ProvisionedThroughput": {
+					"ReadCapacityUnits": 5,
+					"WriteCapacityUnits": 5
+				}
 
-    }
-  },
-  "myS3Bucket":
-  {
-    "Type": "AWS::S3::Bucket",
-    "Properties":
-    {
-      "BucketName" : {"Ref":"domain"},
+			}
+		},
+		"myS3Bucket": {
+			"Type": "AWS::S3::Bucket",
+			"Properties": {
+				"BucketName": {
+					"Ref": "domain"
+				}
 
-    }
-  },
-  "myRDSInstance":
-  {
-    "Type" : "AWS::RDS::DBInstance",
-    "Properties" :
-    {
-      "AllocatedStorage" : "5",
-      "DBInstanceClass" : "db.t2.medium",
-      "DBInstanceIdentifier" : "csye6225-spring2018",
-      "DBName" : "csye6225",
-      "DBSubnetGroupName" : { "Ref": "myDBSubnetGroup" },
-      "Engine" : "mySQL",
-      "EngineVersion" : "5.6.37",
-      "MasterUsername" : { "Ref" : "MasterUsername" },
-      "MasterUserPassword" : { "Ref" : "MasterUserPassword" },
-      "MultiAZ" : false,
-      "PubliclyAccessible" : false,
-      "VPCSecurityGroups" : [{ "Fn::ImportValue" : "dbsg" } ]
+			}
+		},
+		"myRDSInstance": {
+			"Type": "AWS::RDS::DBInstance",
+			"Properties": {
+				"AllocatedStorage": "5",
+				"DBInstanceClass": "db.t2.medium",
+				"DBInstanceIdentifier": "csye6225-spring2018",
+				"DBName": "csye6225",
+				"DBSubnetGroupName": {
+					"Ref": "myDBSubnetGroup"
+				},
+				"Engine": "mySQL",
+				"EngineVersion": "5.6.37",
+				"MasterUsername": {
+					"Ref": "MasterUsername"
+				},
+				"MasterUserPassword": {
+					"Ref": "MasterUserPassword"
+				},
+				"MultiAZ": false,
+				"PubliclyAccessible": false,
+				"VPCSecurityGroups": [{
+					"Fn::ImportValue": "dbsg"
+				}]
 
-    }
-  },
+			}
+		},
 
-  "myDBSubnetGroup" : {
-         "Type" : "AWS::RDS::DBSubnetGroup",
-         "Properties" : {
-           "DBSubnetGroupDescription" : "making a RDS subnet from my VPC",
-            "SubnetIds" : [{"Fn::ImportValue" :"dbsubnet1"}, {"Fn::ImportValue" :"dbsubnet2"}]
-         }
-      }
+		"myDBSubnetGroup": {
+			"Type": "AWS::RDS::DBSubnetGroup",
+			"Properties": {
+				"DBSubnetGroupDescription": "making a RDS subnet from my VPC",
+				"SubnetIds": [{
+					"Fn::ImportValue": "dbsubnet1"
+				}, {
+					"Fn::ImportValue": "dbsubnet2"
+				}]
+			}
+		}
 
-},
-"Outputs" : {
-  "S3BucketID" : {
-    "Description" : "S3 bucket arn",
-    "Value" : { "Fn::GetAtt" : [ "myS3Bucket", "Arn" ] },
-    "Export" : {"Name" : "s3BucketARN"}
+	},
+	"Outputs": {
+		"S3BucketID": {
+			"Description": "S3 bucket arn",
+			"Value": {
+				"Fn::GetAtt": ["myS3Bucket", "Arn"]
+			},
+			"Export": {
+				"Name": "s3BucketARN"
+			}
 
-  }
-}
+		}
+	}
 }
