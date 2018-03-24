@@ -168,4 +168,15 @@ public class IndexController {
     }
     return "editProfile";
   }
+
+  @PostMapping("resetPassword")
+  public String resetPassword(@RequestParam String email){
+
+      return "index";
+  }
+
+  @GetMapping("resetPassword")
+  public String getResetPassword(){
+      return "passwordReset";
+  }
 }
