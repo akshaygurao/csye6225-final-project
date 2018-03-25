@@ -54,6 +54,60 @@
 
 			}
 		},
+		"myLambdaRole":
+		{
+			"Type":"AWS::IAM::Role",
+			"Properties": {
+				"RoleName": "LambdaExecutionRole",
+				"AssumeRolePolicyDocument": {
+
+					"Version": "2012-10-17",
+					"Statement": [{
+						"Effect": "Allow",
+						"Principal": {
+							"Service": ["lambda.amazonaws.com"]
+						},
+						"Action": ["sts:AssumeRole"]
+					}]
+				},
+				"ManagedPolicyArns":["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]
+			}
+		},
+		"myCloudWatchPolicy":
+		{
+			"Type": "AWS::IAM::ManagedPolicy",
+			"DependsOn": "myEC2Role",
+			"Properties":
+			{
+				"ManagedPolicyName": "LogRolePolicy",
+				"PolicyDocument":
+				{
+					"Version":"2012-10-17",
+					"Statement":
+					[
+						{
+								"Effect": "Allow",
+								"Action":
+								[
+										"logs:CreateLogGroup",
+										"logs:CreateLogStream",
+										"logs:PutLogEvents",
+										"logs:DescribeLogStreams"
+										"s3:GetObject"
+								],
+								"Resource":
+								[
+										"arn:aws:logs:*:*:*",
+										{
+											"Ref": "arn"
+										}	
+								]
+						}
+					]
+				},
+				"Roles": ["CodeDeployEC2ServiceRole"]
+			}
+		},
 
 		"myCodeDeployEC2S3Policy": {
 			"Type": "AWS::IAM::ManagedPolicy",
