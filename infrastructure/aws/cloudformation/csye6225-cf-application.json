@@ -78,7 +78,7 @@
 								"sudo ./install auto \n",
 								"sudo service codedeploy-agent start \n",
 								"sudo wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py"
-								"sudo python ./awslogs-agent-setup.py --region us-east-1"
+								"sudo python ./awslogs-agent-setup.py -n -r ",{ "Ref" : "AWS::Region" }
 								"sudo apt-get install tomcat8 -y \n",
                 {"Fn::Join":["",["sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=",{"Ref":"MasterUsername"}," -Dspring.datasource.password=",{"Ref":"MasterUserPassword"}," -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 \n"]]},
                 {
@@ -153,6 +153,20 @@
 				"InstanceProfileName": "myProfile"
 			}
 		},
+		"mySNSTopic":
+		{
+			"Type" : "AWS::SNS::Topic",
+			"Properties":
+			{
+				"Subscription":
+				{
+					"Protocol":"lambda"
+				}
+			},
+			"TopicName" : "password_reset"
+
+		},
+
 		"myDynamoDBTable": {
 			"Type": "AWS::DynamoDB::Table",
 			"Properties": {

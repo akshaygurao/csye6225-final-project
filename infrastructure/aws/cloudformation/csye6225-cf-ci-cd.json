@@ -92,7 +92,7 @@
 										"logs:CreateLogGroup",
 										"logs:CreateLogStream",
 										"logs:PutLogEvents",
-										"logs:DescribeLogStreams"
+										"logs:DescribeLogStreams",
 										"s3:GetObject"
 								],
 								"Resource":
@@ -100,7 +100,7 @@
 										"arn:aws:logs:*:*:*",
 										{
 											"Ref": "arn"
-										}	
+										}
 								]
 						}
 					]
