@@ -19,7 +19,9 @@ instance_id=$(aws cloudformation describe-stack-resources --stack-name $var1 --l
 echo "$instance_id"
 aws ec2 modify-instance-attribute --instance-id $instance_id --no-disable-api-termination
 
-#code for emptying the s3 bucket
+#code for emptying the main s3 bucket
+bucket_id=$(aws cloudformation describe-stack-resources --stack-name $var1 --logical-resource-id myS3Bucket --query "StackResources[0].PhysicalResourceId" --output text)
+aws s3 rm 's3://'$bucket_id --recursive
 
 
 

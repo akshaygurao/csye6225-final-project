@@ -77,8 +77,10 @@
 								"sudo chmod +x ./install \n",
 								"sudo ./install auto \n",
 								"sudo service codedeploy-agent start \n",
+								"sudo wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py"
+								"sudo python ./awslogs-agent-setup.py -n -r ",{ "Ref" : "AWS::Region" }
 								"sudo apt-get install tomcat8 -y \n",
-                "sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=csye6225master -Dspring.datasource.password=csye6225password  -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 \n",
+                {"Fn::Join":["",["sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dspring.datasource.username=",{"Ref":"MasterUsername"}," -Dspring.datasource.password=",{"Ref":"MasterUserPassword"}," -Dspring.profiles.active=aws\\\"\" >> /etc/default/tomcat8 \n"]]},
                 {
 									"Fn::Join": [
 										"", [
@@ -151,6 +153,20 @@
 				"InstanceProfileName": "myProfile"
 			}
 		},
+		"mySNSTopic":
+		{
+			"Type" : "AWS::SNS::Topic",
+			"Properties":
+			{
+				"Subscription":
+				{
+					"Protocol":"lambda"
+				}
+			},
+			"TopicName" : "password_reset"
+
+		},
+
 		"myDynamoDBTable": {
 			"Type": "AWS::DynamoDB::Table",
 			"Properties": {
@@ -191,8 +207,8 @@
 				},
 				"Engine": "mySQL",
 				"EngineVersion": "5.6.37",
-				"MasterUsername": "csye6225master",
-				"MasterUserPassword": "csye6225password",
+				"MasterUsername": {"Ref":"MasterUsername"},
+				"MasterUserPassword": {"Ref":"MasterUserPassword"},
 				"MultiAZ": false,
 				"PubliclyAccessible": false,
 				"VPCSecurityGroups": [{
