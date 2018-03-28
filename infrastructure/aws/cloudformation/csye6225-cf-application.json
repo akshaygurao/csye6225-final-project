@@ -197,19 +197,22 @@
 			"Type": "AWS::DynamoDB::Table",
 			"Properties": {
 				"AttributeDefinitions": [{
-					"AttributeName": "id",
+					"AttributeName": "email",
 					"AttributeType": "S"
 				}],
 				"KeySchema": [{
-					"AttributeName": "id",
+					"AttributeName": "email",
 					"KeyType": "HASH"
 				}],
 				"TableName": "csye6225",
 				"ProvisionedThroughput": {
 					"ReadCapacityUnits": 5,
 					"WriteCapacityUnits": 5
+				},
+				"TimeToLiveSpecification": {
+					"AttributeName": "TimeToLive",
+    			"Enabled": "TRUE"
 				}
-
 			}
 		},
 		"myS3Bucket": {
