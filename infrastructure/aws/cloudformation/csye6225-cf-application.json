@@ -106,6 +106,17 @@
 										]
 									]
 								},
+								{
+									"Fn::Join": [
+										"", [
+											"echo 'JAVA_OPTS=\"${JAVA_OPTS} -DtopicArn=\\\"arn:aws:sns:us-east-1:",
+											{
+												"Ref": "AWS::AccountId"
+											},
+											":password_reset\\\"\"' >> /etc/default/tomcat8 \n"
+										]
+									]
+								},
 
 								"sudo service tomcat8 restart \n",
                 "sudo mkdir /home/ubuntu/temp/ \n",
