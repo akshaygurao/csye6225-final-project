@@ -1,10 +1,18 @@
 package com.csye6225.spring2018.controller;
 
+import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.sns.AmazonSNS;
+import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.AmazonSNSClientBuilder;
+import com.amazonaws.services.sns.model.*;
 import com.csye6225.spring2018.User;
 import com.csye6225.spring2018.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -169,9 +177,18 @@ public class IndexController {
     return "editProfile";
   }
 
+  @Value("${topicArn}")
+  private String topicArn;
+
   @PostMapping("resetPassword")
   public String resetPassword(@RequestParam String email){
 
+      AmazonSNS amazonSNS = AmazonSNSClientBuilder.defaultClient();
+
+      String resetEmail = email;
+      PublishRequest publishRequest = new PublishRequest(topicArn, resetEmail);
+      PublishResult publishResult = amazonSNS.publish(publishRequest);
+      System.out.println(publishResult);
       return "index";
   }
 
