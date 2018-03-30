@@ -208,11 +208,11 @@
 			"Type": "AWS::DynamoDB::Table",
 			"Properties": {
 				"AttributeDefinitions": [{
-					"AttributeName": "email",
+					"AttributeName": "ID",
 					"AttributeType": "S"
 				}],
 				"KeySchema": [{
-					"AttributeName": "email",
+					"AttributeName": "ID",
 					"KeyType": "HASH"
 				}],
 				"TableName": "csye6225",
@@ -221,7 +221,7 @@
 					"WriteCapacityUnits": 5
 				},
 				"TimeToLiveSpecification": {
-					"AttributeName": "TimeToLive",
+					"AttributeName": "ttl",
     			"Enabled": "TRUE"
 				}
 			}
