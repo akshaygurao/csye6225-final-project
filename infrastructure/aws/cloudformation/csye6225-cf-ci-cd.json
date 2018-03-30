@@ -94,16 +94,26 @@
 										"logs:CreateLogGroup",
 										"logs:CreateLogStream",
 										"logs:PutLogEvents",
-										"logs:DescribeLogStreams",
-										"s3:GetObject"
+										"logs:DescribeLogStreams"
 								],
 								"Resource":
 								[
-										"arn:aws:logs:*:*:*",
-										{
-											"Ref": "arn"
-										}
+										"arn:aws:logs:*:*:*"
 								]
+						},
+						{
+							"Effect": "Allow",
+							"Action":
+							[
+									"s3:GetObject"
+							],
+							"Resource":
+							[
+									{
+										"Ref": "arn"
+									}
+							]
+
 						}
 					]
 				},
