@@ -47,6 +47,9 @@
 		},
 		"CertificateArn": {
 			"Type": "String"
+		},
+		"hostedZone": {
+			"Type": "String"
 		}
 
 	},
@@ -399,7 +402,7 @@
 		"myDNSRecord" : {
       "Type" : "AWS::Route53::RecordSet",
       "Properties" : {
-         "HostedZoneName" : { "Ref" : "domain" },
+         "HostedZoneName" : { "Ref" : "hostedZone" },
          "Comment" : "DNS name for my instance.",
          "Name" : "myRecordSet",
          "Type" : "A",
