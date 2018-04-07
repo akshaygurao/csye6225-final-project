@@ -66,7 +66,7 @@
 				"Cooldown": "60",
 				"DesiredCapacity" : "3",
 				"TargetGroupARNs":[{"Ref":"myTargetGroup"}],
-				"Tags":[{"Key":"Name","Value":"prod-ec2","PropogateAtLaunch":true},{"Key":"owner","Value":"csye6225-group","PropogateAtLaunch":true}]
+				"Tags":[{"Key" : "Name", "Value" : "prod-ec2", "PropagateAtLaunch" : "true"},{"Key" : "owner", "Value" : "csye6225-group", "PropagateAtLaunch" : "true"}]
         }
       },
 		"WebServerScaleUpPolicy": {
@@ -346,6 +346,7 @@
 
     "myListener" : {
       "Type" : "AWS::ElasticLoadBalancingV2::Listener",
+
       "Properties" : {
         "DefaultActions" : [{
           "Type" : "forward",
@@ -387,7 +388,7 @@
 					"Ref": "myCodeDeployApp"
 				},
 				"DeploymentGroupName": "csye6225group",
-				"AutoScalingGroup" : {"Ref" : "myAutoScalingGroup"},
+				"AutoScalingGroups" : [{"Ref" : "myAutoScalingGroup"}],
 				"DeploymentStyle": {
 					"DeploymentType": "IN_PLACE",
 					"DeploymentOption": "WITHOUT_TRAFFIC_CONTROL"
@@ -404,12 +405,12 @@
       "Properties" : {
          "HostedZoneName" : { "Ref" : "hostedZone" },
          "Comment" : "DNS name for my instance.",
-         "Name" : "myRecordSet",
+         "Name" : {"Fn::Join": ["",["myRecordSet.",{"Ref":"hostedZone"}]]},
          "Type" : "A",
-         "TTL" : "900",
-         "ResourceRecords" : [
-            { "Fn::GetAtt" : [ "myLoadBalancer", "DNSName" ] }
-         ]
+				 "AliasTarget" : {
+					  "DNSName" : {"Fn::GetAtt" : [ "myLoadBalancer", "DNSName" ]},
+					  "HostedZoneId" : { "Fn::GetAtt" : ["myLoadBalancer", "CanonicalHostedZoneID"] }
+					}
       }
 
 	}
