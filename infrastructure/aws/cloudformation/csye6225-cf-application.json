@@ -337,7 +337,7 @@
       "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
       "Properties" : {
         "Subnets" : [{"Fn::ImportValue": "elbsubnet1"},{"Fn::ImportValue": "elbsubnet2"}],
-				"SecurityGroups" : [{"Fn::ImportValue": "eLbsg"}]
+				"SecurityGroups" : [{"Fn::ImportValue": "elbsg"}]
       }
     },
 
@@ -351,7 +351,7 @@
         "LoadBalancerArn" : { "Ref" : "myLoadBalancer" },
         "Port" : "443",
         "Protocol" : "HTTPS",
-				"Certificates" : [{"Ref" : "CertificateArn"}]
+				"Certificates" : [{"CertificateArn" : {"Ref" : "CertificateArn"}}]
       }
     },
 
@@ -390,7 +390,7 @@
 					"DeploymentOption": "WITHOUT_TRAFFIC_CONTROL"
 				},
 				"ServiceRoleArn": {
-					"Fn::GetAtt": ["myCodeDeployRole", "Arn"]
+					"Fn::ImportValue": "codedeployrole"
 				}
 			}
 
@@ -409,7 +409,9 @@
          ]
       }
 
-	},
+	}
+},
+
 	"Outputs": {
 		"S3BucketID": {
 			"Description": "S3 bucket arn",
