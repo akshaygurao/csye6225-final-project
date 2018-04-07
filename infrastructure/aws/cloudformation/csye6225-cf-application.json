@@ -44,6 +44,9 @@
 		},
 		"RootVolumeType": {
 			"Type": "String"
+		},
+		"CertificateArn": {
+			"Type": "String"
 		}
 
 	},
@@ -51,13 +54,16 @@
 	"Resources": {
 		"myAutoScalingGroup" : {
       "Type" : "AWS::AutoScaling::AutoScalingGroup",
+			"DependsOn":"myListener",
       "Properties" : {
         "VPCZoneIdentifier" : [{"Fn::ImportValue": "websubnet1"},{"Fn::ImportValue": "websubnet2"}],
         "LaunchConfigurationName" : { "Ref" : "LaunchConfig" },
         "MinSize" : "3",
         "MaxSize" : "7",
 				"Cooldown": "60",
-				"DesiredCapacity" : "3"
+				"DesiredCapacity" : "3",
+				"TargetGroupARNs":[{"Ref":"myTargetGroup"}],
+				"Tags":[{"Key":"Name","Value":"prod-ec2","PropogateAtLaunch":true},{"Key":"owner","Value":"csye6225-group","PropogateAtLaunch":true}]
         }
       },
 		"WebServerScaleUpPolicy": {
@@ -85,13 +91,13 @@
   	"CPUAlarmHigh": {
     "Type": "AWS::CloudWatch::Alarm",
     "Properties": {
-      "AlarmDescription": "Scale-up if CPU > 90% for 10 minutes",
+      "AlarmDescription": "Scale-up if CPU > 10% for 10 minutes",
       "MetricName": "CPUUtilization",
       "Namespace": "AWS/EC2",
       "Statistic": "Average",
       "Period": "300",
       "EvaluationPeriods": "2",
-      "Threshold": "90",
+      "Threshold": "10",
       "AlarmActions": [
         {
           "Ref": "WebServerScaleUpPolicy"
@@ -111,13 +117,13 @@
   "CPUAlarmLow": {
     "Type": "AWS::CloudWatch::Alarm",
     "Properties": {
-      "AlarmDescription": "Scale-down if CPU < 70% for 10 minutes",
+      "AlarmDescription": "Scale-down if CPU < 8% for 10 minutes",
       "MetricName": "CPUUtilization",
       "Namespace": "AWS/EC2",
       "Statistic": "Average",
       "Period": "300",
       "EvaluationPeriods": "2",
-      "Threshold": "70",
+      "Threshold": "8",
       "AlarmActions": [
         {
           "Ref": "WebServerScaleDownPolicy"
