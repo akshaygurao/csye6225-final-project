@@ -405,7 +405,7 @@
       "Properties" : {
          "HostedZoneName" : { "Ref" : "hostedZone" },
          "Comment" : "DNS name for my instance.",
-         "Name" : {"Fn::Join": ["",["myRecordSet.",{"Ref":"hostedZone"}]]},
+         "Name" : {"Ref":"hostedZone"},
          "Type" : "A",
 				 "AliasTarget" : {
 					  "DNSName" : {"Fn::GetAtt" : [ "myLoadBalancer", "DNSName" ]},
