@@ -393,6 +393,18 @@
 					"DeploymentType": "IN_PLACE",
 					"DeploymentOption": "WITHOUT_TRAFFIC_CONTROL"
 				},
+				"Ec2TagFilters": [
+          {
+            "Key": "EC2-Key",
+            "Value":"EC2-Value",
+            "Type": "KEY_AND_VALUE"
+          }
+        ],
+        "LoadBalancerInfo": {
+          "ElbInfoList": [{
+            "Name": { "Fn::GetAtt" : [ "myLoadBalancer" , "LoadBalancerName"]}
+          }]
+        },
 				"ServiceRoleArn": {
 					"Fn::ImportValue": "codedeployrole"
 				}
