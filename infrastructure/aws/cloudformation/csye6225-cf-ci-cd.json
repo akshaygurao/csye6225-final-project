@@ -240,35 +240,6 @@
 				}
 
 			}
-		},
-		"myCodeDeployApp": {
-			"Type": "AWS::CodeDeploy::Application",
-			"Properties": {
-				"ApplicationName": "testapp",
-				"ComputePlatform": "Server"
-			}
-		},
-		"myDeploymentGroup": {
-			"Type": "AWS::CodeDeploy::DeploymentGroup",
-			"Properties": {
-				"ApplicationName": {
-					"Ref": "myCodeDeployApp"
-				},
-				"DeploymentGroupName": "csye6225group",
-				"DeploymentStyle": {
-					"DeploymentType": "IN_PLACE",
-					"DeploymentOption": "WITHOUT_TRAFFIC_CONTROL"
-				},
-				"Ec2TagFilters": [{
-					"Key": "Name",
-					"Value": "myEC2Instance",
-					"Type": "KEY_AND_VALUE"
-				}],
-				"ServiceRoleArn": {
-					"Fn::GetAtt": ["myCodeDeployRole", "Arn"]
-				}
-			}
-
 		}
 
 	},
@@ -280,6 +251,16 @@
 			},
 			"Export": {
 				"Name": "ec2iamrole"
+			}
+
+		},
+		"myCodeDeployRole": {
+			"Description": "Code Deploy Arn",
+			"Value": {
+				"Fn::GetAtt": ["myCodeDeployRole", "Arn"]
+			},
+			"Export": {
+				"Name": "codedeployrole"
 			}
 
 		}
