@@ -24,7 +24,7 @@ notifications:
       - venkatakrishnan.v@husky.neu.edu
 branches:
   only:
-    - assignment_8
+    - master
 
 after_success:
   - pwd
@@ -53,7 +53,7 @@ deploy:
     access_key_id: $access_key_id
     secret_access_key: $secret_access_key
     on:
-      branch: assignment_8
+      branch: master
 
   - provider: codedeploy
     access_key_id: $access_key_id
@@ -66,4 +66,4 @@ deploy:
     deployment_group: $deployment_group
     wait-until-deployed: true
     on:
-      branch: assignment_8
+      branch: master

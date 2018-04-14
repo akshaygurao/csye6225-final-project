@@ -14,7 +14,7 @@
          },
          "DependsOn":["myGateway"]
         },
-        "webserverSubnet" :
+        "webserverSubnet1" :
         {
           "Type" : "AWS::EC2::Subnet",
           "Properties" :
@@ -22,8 +22,44 @@
             "VpcId" : { "Ref" : "myVPC" },
             "MapPublicIpOnLaunch": "true",
             "CidrBlock" : "10.0.0.0/24",
-            "AvailabilityZone" : "us-east-1c",
-            "Tags" : [ { "Key" : "Name", "Value" : "myWEBsubnet" } ]
+            "AvailabilityZone" : "us-east-1a",
+            "Tags" : [ { "Key" : "Name", "Value" : "myWEBsubnet1" } ]
+          }
+        },
+        "webserverSubnet2" :
+        {
+          "Type" : "AWS::EC2::Subnet",
+          "Properties" :
+          {
+            "VpcId" : { "Ref" : "myVPC" },
+            "MapPublicIpOnLaunch": "true",
+            "CidrBlock" : "10.0.1.0/24",
+            "AvailabilityZone" : "us-east-1b",
+            "Tags" : [ { "Key" : "Name", "Value" : "myWEBsubnet2" } ]
+          }
+        },
+        "elbSubnet1" :
+        {
+          "Type" : "AWS::EC2::Subnet",
+          "Properties" :
+          {
+            "VpcId" : { "Ref" : "myVPC" },
+            "MapPublicIpOnLaunch": "true",
+            "CidrBlock" : "10.0.3.0/27",
+            "AvailabilityZone" : "us-east-1a",
+            "Tags" : [ { "Key" : "Name", "Value" : "myELBsubnet1" } ]
+          }
+        },
+        "elbSubnet2" :
+        {
+          "Type" : "AWS::EC2::Subnet",
+          "Properties" :
+          {
+            "VpcId" : { "Ref" : "myVPC" },
+            "MapPublicIpOnLaunch": "true",
+            "CidrBlock" : "10.0.4.0/27",
+            "AvailabilityZone" : "us-east-1b",
+            "Tags" : [ { "Key" : "Name", "Value" : "myELBsubnet2" } ]
           }
         },
         "publicRouteTable":
@@ -38,13 +74,40 @@
               }
           }
         },
-        "webserverpublictableassociation":
+        "webserverpublictableassociation1":
         {
           "Type" : "AWS::EC2::SubnetRouteTableAssociation",
           "Properties" :
           {
             "RouteTableId" : {"Ref":"publicRouteTable"},
-            "SubnetId" : {"Ref":"webserverSubnet"}
+            "SubnetId" : {"Ref":"webserverSubnet1"}
+          }
+        },
+        "webserverpublictableassociation2":
+        {
+          "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+          "Properties" :
+          {
+            "RouteTableId" : {"Ref":"publicRouteTable"},
+            "SubnetId" : {"Ref":"webserverSubnet2"}
+          }
+        },
+        "webserverpublictableassociation3":
+        {
+          "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+          "Properties" :
+          {
+            "RouteTableId" : {"Ref":"publicRouteTable"},
+            "SubnetId" : {"Ref":"elbSubnet1"}
+          }
+        },
+        "webserverpublictableassociation4":
+        {
+          "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+          "Properties" :
+          {
+            "RouteTableId" : {"Ref":"publicRouteTable"},
+            "SubnetId" : {"Ref":"elbSubnet2"}
           }
         },
         "dbserverSubnet1" :
@@ -54,7 +117,7 @@
           {
             "VpcId" : { "Ref" : "myVPC" },
             "AvailabilityZone" : "us-east-1a",
-            "CidrBlock" : "10.0.1.0/24",
+            "CidrBlock" : "10.0.5.0/24",
             "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet1" } ]
           }
         },
@@ -65,7 +128,7 @@
           {
             "VpcId" : { "Ref" : "myVPC" },
             "AvailabilityZone" : "us-east-1b",
-            "CidrBlock" : "10.0.2.0/24",
+            "CidrBlock" : "10.0.6.0/24",
             "Tags" : [ { "Key" : "Name", "Value" : "myDBsubnet2" } ]
           }
         },
@@ -140,41 +203,47 @@
                 }
             }
         },
-        "webserverSecurityGroup":
+        "elbSecurityGroup":
         {
               "Type": "AWS::EC2::SecurityGroup",
               "Properties": {
                 "VpcId":{"Ref" : "myVPC"},
-                "Tags": [ {"Key" : "Name", "Value" : "csye-webapp"} ],
-                "GroupDescription": "Web server firewall rules",
+                "Tags": [ {"Key" : "Name", "Value" : "csye-elb"} ],
+                "GroupDescription": "Load Balancer firewall rules",
                 "SecurityGroupIngress": [
-                  {
-                    "IpProtocol": "tcp",
-                    "FromPort": "80",
-                    "ToPort": "80",
-                    "CidrIp": "0.0.0.0/0"
-                  },
                   {
                     "IpProtocol": "tcp",
                     "FromPort": "443",
                     "ToPort": "443",
                     "CidrIp": "0.0.0.0/0"
-                  },
-                  {
-                    "IpProtocol": "tcp",
-                    "FromPort": "22",
-                    "ToPort": "22",
-                    "CidrIp": "0.0.0.0/0"
-                  },
-                  {
-                    "IpProtocol": "tcp",
-                    "FromPort": "8080",
-                    "ToPort": "8080",
-                    "CidrIp": "0.0.0.0/0"
-                  },
+                  }
                 ]
               }
             },
+            "webserverSecurityGroup":
+            {
+                  "Type": "AWS::EC2::SecurityGroup",
+                  "DependsOn":"elbSecurityGroup",
+                  "Properties": {
+                    "VpcId":{"Ref" : "myVPC"},
+                    "Tags": [ {"Key" : "Name", "Value" : "csye-webapp"} ],
+                    "GroupDescription": "Web server firewall rules",
+                    "SecurityGroupIngress": [
+                      {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "0.0.0.0/0"
+                      },
+                      {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8080",
+                        "ToPort": "8080",
+                        "SourceSecurityGroupId" : { "Fn::GetAtt":["elbSecurityGroup","GroupId"]}
+                      },
+                    ]
+                  }
+                },
             "dbserverSecurityGroup":
             {
                   "Type": "AWS::EC2::SecurityGroup",
@@ -189,7 +258,7 @@
                         "FromPort": "3306",
                         "ToPort": "3306",
                         "SourceSecurityGroupId" : { "Fn::GetAtt":["webserverSecurityGroup","GroupId"]}
-                      },
+                      }
 
                     ]
                   }
@@ -215,16 +284,52 @@
     },
 
   "Outputs" : {
-    "websubnetID" : {
-      "Description" : "web server subnet",
-      "Value" : { "Ref" : "webserverSubnet" },
-      "Export" : {"Name" : "websubnet"}
+    "websubnetID1" : {
+      "Description" : "web server subnet 1",
+      "Value" : { "Ref" : "webserverSubnet1" },
+      "Export" : {"Name" : "websubnet1"}
 
     },
-    "websubnetzone" : {
-      "Description" : "web server subnet availability zone",
-      "Value" : { "Fn::GetAtt" : [ "webserverSubnet", "AvailabilityZone" ] },
-      "Export" : {"Name" : "websubnetzone"}
+    "websubnetID2" : {
+      "Description" : "web server subnet 2",
+      "Value" : { "Ref" : "webserverSubnet2" },
+      "Export" : {"Name" : "websubnet2"}
+
+    },
+    "elbsubnetID1" : {
+      "Description" : "elb server subnet 1",
+      "Value" : { "Ref" : "elbSubnet1" },
+      "Export" : {"Name" : "elbsubnet1"}
+
+    },
+    "elbsubnetID2" : {
+      "Description" : "elb server subnet 2",
+      "Value" : { "Ref" : "elbSubnet2" },
+      "Export" : {"Name" : "elbsubnet2"}
+
+    },
+    "websubnetzone1" : {
+      "Description" : "web server subnet 1 availability zone",
+      "Value" : { "Fn::GetAtt" : [ "webserverSubnet1", "AvailabilityZone" ] },
+      "Export" : {"Name" : "websubnetzone1"}
+
+    },
+    "websubnetzone2" : {
+      "Description" : "web server subnet 2 availability zone",
+      "Value" : { "Fn::GetAtt" : [ "webserverSubnet2", "AvailabilityZone" ] },
+      "Export" : {"Name" : "websubnetzone2"}
+
+    },
+    "elbsubnetzone1" : {
+      "Description" : "elb subnet 1  availability zone",
+      "Value" : { "Fn::GetAtt" : [ "elbSubnet1", "AvailabilityZone" ] },
+      "Export" : {"Name" : "elbsubnetzone1"}
+
+    },
+    "elbsubnetzone2" : {
+      "Description" : "elb subnet 2 availability zone",
+      "Value" : { "Fn::GetAtt" : [ "elbSubnet2", "AvailabilityZone" ] },
+      "Export" : {"Name" : "elbsubnetzone2"}
 
     },
 
@@ -238,6 +343,11 @@
       "Value" : { "Ref" : "dbserverSubnet2" },
       "Export" : {"Name" : "dbsubnet2"}
     },
+    "elbsgID" : {
+      "Description" : "ELB security group",
+      "Value" : { "Fn::GetAtt" : [ "elbSecurityGroup", "GroupId" ] },
+      "Export" : {"Name" : "elbsg"}
+    },
     "websgID" : {
       "Description" : "Web security group",
       "Value" : { "Fn::GetAtt" : [ "webserverSecurityGroup", "GroupId" ] },
@@ -247,6 +357,11 @@
       "Description" : "Db security group",
       "Value" : { "Fn::GetAtt" : [ "dbserverSecurityGroup", "GroupId" ] },
       "Export" : {"Name" : "dbsg"}
+    },
+    "vpcID" : {
+      "Description" : "VPC ID",
+      "Value" : { "Ref" : "myVPC" },
+      "Export" : {"Name" : "vpcID"}
     }
 }
 
