@@ -7,11 +7,11 @@ import javax.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name = "personID", unique=true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "personID", unique = true, nullable = false)
     private int id;
 
-    @Column(name="email")
+    @Column(name = "email")
     private String email;
 
     @Column(name = "password")
@@ -29,10 +29,6 @@ public class User {
     @Column(name = "about")
     private String about;
 
-
-    public User(){
-
-    }
 
     public int getId() {
         return id;

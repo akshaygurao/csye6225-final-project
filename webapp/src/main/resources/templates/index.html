@@ -2,98 +2,161 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:replace="fragments/header :: header"/>
 <head>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
-
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <style>
-        .btn-search {
-            background: #424242;
-            border-radius: 0;
-            color: #fff;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #1c1c1c;
-        }
-        .btn-search:link, .btn-search:visited {
-            color: #fff;
-        }
-        .btn-search:active, .btn-search:hover {
-            background: #1c1c1c;
-            color: #fff;
-        }
-    </style>
 </head>
-<body>
+<body id="page-top">
 <div th:replace="fragments/navigation :: navigation"/>
 
+<!-- Header -->
+<header class="masthead d-flex">
+    <div class="container text-center my-auto">
+        <h1 class="mb-1">Stylish Portfolio</h1>
+        <h3 class="mb-5">
+            <em>A Free Bootstrap Theme by Start Bootstrap</em>
+        </h3>
+        <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Find Out More</a>
+    </div>
+    <div class="overlay"></div>
+</header>
 
-<!-- Page Content -->
-<div class="container">
-    <p>
-        Welcome to CSYE 6225 Spring 2018 Semester!!!
-    </p>
-    <br></br>
-    <div class="input-group col-sm-10">
-        <form class="form-horizontal" id="searchform" enctype="application/json" action="/searchResults" method="post">
-            <input type="text" class="form-control" placeholder="Search by First Name or Last Name ...." id="search" name="search" required="true"></input>
-            <span class="input-group-btn">
-        <input type="submit" class="btn btn-search btn-block" value="Search"></input>
+<!-- About -->
+<section class="content-section bg-light" id="about">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <h2>Stylish Portfolio is the perfect theme for your next project!</h2>
+                <p class="lead mb-5">This theme features a flexible, UX friendly sidebar menu and stock photos from our friends at
+                    <a href="https://unsplash.com/">Unsplash</a>!</p>
+                <a class="btn btn-dark btn-xl js-scroll-trigger" href="#services">What We Offer</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services -->
+<section class="content-section bg-primary text-white text-center" id="services">
+    <div class="container">
+        <div class="content-section-heading">
+            <h3 class="text-secondary mb-0">Services</h3>
+            <h2 class="mb-5">What We Offer</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+            <span class="service-icon rounded-circle mx-auto mb-3">
+              <i class="icon-screen-smartphone"></i>
             </span>
-        </form>
+                <h4>
+                    <strong>Responsive</strong>
+                </h4>
+                <p class="text-faded mb-0">Looks great on any screen size!</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+            <span class="service-icon rounded-circle mx-auto mb-3">
+              <i class="icon-pencil"></i>
+            </span>
+                <h4>
+                    <strong>Redesigned</strong>
+                </h4>
+                <p class="text-faded mb-0">Freshly redesigned for Bootstrap 4.</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
+            <span class="service-icon rounded-circle mx-auto mb-3">
+              <i class="icon-like"></i>
+            </span>
+                <h4>
+                    <strong>Favorited</strong>
+                </h4>
+                <p class="text-faded mb-0">Millions of users
+                    <i class="fa fa-heart"></i>
+                    Start Bootstrap!</p>
+            </div>
+            <div class="col-lg-3 col-md-6">
+            <span class="service-icon rounded-circle mx-auto mb-3">
+              <i class="icon-mustache"></i>
+            </span>
+                <h4>
+                    <strong>Question</strong>
+                </h4>
+                <p class="text-faded mb-0">I mustache you a question...</p>
+            </div>
+        </div>
     </div>
-<br/><br/>
-    <div id="myDiv">
-        <table class="table-hover col-sm-10 table-bordered">
-            <form action="/profile" method="post">
-            <thead>
-            <tr>
-                <th><h3>Search Results</h3></th>
-                <th><h3>Action</h3></th>
-            </tr>
-            </thead>
-            <tbody>
-            <!--/*@thymesVar id="searchResults" type="java"*/-->
-            <tr th:each="data, iterstat: ${searchResults}" id="body">
-                <td><input th:type="hidden" th:text="${data}" th:value="${data}" id="username" name="username"></input></td>
-                <td><input th:type="submit" class="btn btn-search btn-block" th:value="Go"></input></td>
-            </tr>
-            </tbody>
-            </form>
-        </table>
+</section>
+
+<!-- Callout -->
+<section class="callout">
+    <div class="container text-center">
+        <h2 class="mx-auto mb-5">Welcome to
+            <em>your</em>
+            next website!</h2>
+        <a class="btn btn-primary btn-xl" href="https://startbootstrap.com/template-overviews/stylish-portfolio/">Download Now!</a>
     </div>
-</div>
-<!-- /.container -->
-<script th:inline="javascript">
-    $("#registerform").submit(function (e) {
-        var object = {
-            search: document.getElementById("search").value
-        };
-        var json = JSON.stringify(object);
-        $.ajax({
-            url: '/search',
-            type:'POST',
-            data:json,
-            dataType: 'json',
-            contentType: "application/json",
-            context: document.body,
-        })
-    })
-</script>
-<script>
-    var x = document.getElementById("myDiv");
-    var y = document.getElementById("body");
-        if (y != null) {
-            x.style.display = "block";
-        }else{
-            x.style.display = "none";
-    }
-</script>
+</section>
+
+<!-- Portfolio -->
+<section class="content-section" id="portfolio">
+    <div class="container">
+        <div class="content-section-heading text-center">
+            <h3 class="text-secondary mb-0">Portfolio</h3>
+            <h2 class="mb-5">Recent Projects</h2>
+        </div>
+        <div class="row no-gutters">
+            <div class="col-lg-6">
+                <a class="portfolio-item" href="#">
+              <span class="caption">
+                <span class="caption-content">
+                  <h2>Stationary</h2>
+                  <p class="mb-0">A yellow pencil with envelopes on a clean, blue backdrop!</p>
+                </span>
+              </span>
+                    <img class="img-fluid" src="https://s3.amazonaws.com/portfolio-akshay/portfolio-1.jpg" alt=""/>
+                </a>
+            </div>
+            <div class="col-lg-6">
+                <a class="portfolio-item" href="#">
+              <span class="caption">
+                <span class="caption-content">
+                  <h2>Ice Cream</h2>
+                  <p class="mb-0">A dark blue background with a colored pencil, a clip, and a tiny ice cream cone!</p>
+                </span>
+              </span>
+                    <img class="img-fluid" src="https://s3.amazonaws.com/portfolio-akshay/portfolio-2.jpg" alt=""/>
+                </a>
+            </div>
+            <div class="col-lg-6">
+                <a class="portfolio-item" href="#">
+              <span class="caption">
+                <span class="caption-content">
+                  <h2>Strawberries</h2>
+                  <p class="mb-0">Strawberries are such a tasty snack, especially with a little sugar on top!</p>
+                </span>
+              </span>
+                    <img class="img-fluid" src="https://s3.amazonaws.com/portfolio-akshay/portfolio-3.jpg" alt=""/>
+                </a>
+            </div>
+            <div class="col-lg-6">
+                <a class="portfolio-item" href="#">
+              <span class="caption">
+                <span class="caption-content">
+                  <h2>Workspace</h2>
+                  <p class="mb-0">A yellow workspace with some scissors, pencils, and other objects.</p>
+                </span>
+              </span>
+                    <img class="img-fluid" src="https://s3.amazonaws.com/portfolio-akshay/portfolio-4.jpg" alt=""/>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="content-section bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">The buttons below are impossible to resist...</h2>
+        <a href="#" class="btn btn-xl btn-light mr-4">Click Me!</a>
+        <a href="#" class="btn btn-xl btn-dark">Look at Me!</a>
+    </div>
+</section>
+
 <div th:replace="fragments/footer :: footer"/>
 </body>
 </html>

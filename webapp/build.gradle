@@ -103,6 +103,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
     compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.285'
+
+    testCompile("org.assertj:assertj-core:3.10.0")
+
 }
 
 war {
