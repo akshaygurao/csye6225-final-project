@@ -19,8 +19,7 @@ public class TestControllerTest extends SpringBootWebApplicationTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
-
-
+    
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
